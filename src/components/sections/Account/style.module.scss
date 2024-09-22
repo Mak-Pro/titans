@@ -1,0 +1,76 @@
+.account {
+  display: flex;
+  flex-direction: column;
+  gap: 20px 0;
+  height: calc($tgViewportHeight - (var(--global-nav-bottom-padding) + 46px));
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &__uploader {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex-direction: column;
+
+    &_picture {
+      min-width: 124px;
+      max-width: 124px;
+      min-height: 124px;
+      max-height: 124px;
+      background-color: var(--fill-item);
+      border: 1px solid var(--stroke-dark);
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      img {
+        position: relative;
+        object-fit: cover;
+        z-index: 0;
+      }
+    }
+
+    &_btn {
+      position: relative;
+      height: 40px;
+      width: 98px;
+      background-color: var(--fill-item);
+      border: 1px solid var(--button-text-disabled);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0 8px;
+      margin-top: -21px;
+      z-index: 1;
+    }
+  }
+
+  &__title {
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px 0;
+  }
+}

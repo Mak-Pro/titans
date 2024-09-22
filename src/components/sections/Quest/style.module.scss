@@ -1,0 +1,13 @@
+.quest {
+  display: flex;
+  flex-direction: column;
+  //   padding-bottom: var(--global-bottom-padding);
+
+  &__title {
+    text-align: center;
+  }
+
+  p {
+    text-align: center;
+  }
+}

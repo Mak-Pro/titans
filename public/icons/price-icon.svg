@@ -1,0 +1,14 @@
+<svg width="37" height="24" viewBox="0 0 37 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="4.66675" y="11" width="4" height="2" fill="#C57032"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M16.5315 19.0063C15.3858 19.6395 14.0684 20 12.6667 20C8.24847 20 4.66675 16.4183 4.66675 12C4.66675 7.58172 8.24847 4 12.6667 4C14.0684 4 15.3858 4.36046 16.5315 4.99374C17.0265 4.48959 17.5747 4.03767 18.1667 3.64702C16.5889 2.60596 14.6986 2 12.6667 2C7.1439 2 2.66675 6.47715 2.66675 12C2.66675 17.5228 7.1439 22 12.6667 22C14.6986 22 16.5889 21.394 18.1667 20.353C17.5747 19.9623 17.0265 19.5104 16.5315 19.0063Z" fill="#C57032"/>
+<mask id="mask0_1_2452" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="14" y="2" width="21" height="20">
+<circle cx="24.6667" cy="12" r="10" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_1_2452)">
+<rect x="14.6667" y="2" width="20" height="2.4" fill="#C57032"/>
+<rect x="14.6667" y="6.40002" width="20" height="2.4" fill="#C57032"/>
+<rect x="14.6667" y="10.8" width="20" height="2.4" fill="#C57032"/>
+<rect x="14.6667" y="15.2" width="20" height="2.4" fill="#C57032"/>
+<rect x="14.6667" y="19.6" width="20" height="2.4" fill="#C57032"/>
+</g>
+</svg>

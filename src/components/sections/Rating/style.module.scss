@@ -1,0 +1,14 @@
+.rating {
+  height: calc($tgViewportHeight - var(--global-nav-bottom-padding));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &__title {
+    text-align: center;
+  }
+
+  p {
+    text-align: center;
+  }
+}

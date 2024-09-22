@@ -1,0 +1,78 @@
+.onboarding {
+  height: $tgViewportHeight;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-bottom: var(--global-bottom-padding);
+
+  &__slider_box {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    position: relative;
+  }
+
+  &__slider {
+    margin: 0 calc(-1 * var(--global-padding));
+    flex: 1;
+
+    &_slide {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      &_content {
+        position: relative;
+        padding: 30px var(--global-padding) 0;
+
+        &_title {
+          margin-bottom: 8px;
+        }
+      }
+
+      &_image {
+        position: relative;
+        width: 100%;
+        padding-top: 89%;
+        overflow: hidden;
+
+        img {
+          object-fit: cover;
+        }
+      }
+    }
+
+    &_pagination {
+      padding: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      & > div {
+        width: 100% !important;
+        display: flex;
+        align-items: center;
+
+        span {
+          flex: 1;
+          display: inline-block;
+          height: 2px;
+          background-color: var(--stroke-dark);
+          border-radius: 0;
+          opacity: 1;
+          margin: 0 !important;
+        }
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      width: 100%;
+    }
+  }
+}

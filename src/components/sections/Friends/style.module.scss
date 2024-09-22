@@ -1,0 +1,96 @@
+.friends {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 60px;
+
+  &__title {
+    text-align: center;
+  }
+
+  p {
+    text-align: center;
+  }
+
+  & > h5 {
+    text-align: center;
+  }
+
+  &__bonuses {
+    display: flex;
+    flex-direction: column;
+    gap: 8px 0;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+
+    &_grid {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -4px;
+      gap: 8px 0;
+
+      &_column {
+        width: calc(100% / 3);
+        padding: 0 4px;
+
+        &:nth-child(1) {
+          clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
+        }
+
+        &:nth-child(3) {
+          clip-path: polygon(
+            0 0,
+            calc(100% - 12px) 0,
+            100% 12px,
+            100% 100%,
+            0 100%
+          );
+        }
+      }
+    }
+  }
+
+  &__actions {
+    width: 100%;
+    max-width: var(--max-width);
+    padding: 0 var(--global-padding);
+    display: flex;
+    position: fixed;
+    left: 50%;
+    bottom: var(--global-nav-bottom-padding);
+    transform: translateX(-50%);
+    z-index: 2;
+    gap: 0 10px;
+
+    button {
+      &:nth-of-type(1) {
+        flex: 1;
+      }
+
+      &:nth-of-type(2) {
+        padding: 0;
+        width: 48px;
+        clip-path: polygon(
+          0 0,
+          100% 0,
+          100% calc(100% - 8px),
+          calc(100% - 8px) 100%,
+          0 100%
+        );
+      }
+    }
+  }
+
+  &__modal_header {
+    margin-bottom: 18px;
+    text-align: center;
+  }
+
+  &__modal_body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px 0;
+  }
+}

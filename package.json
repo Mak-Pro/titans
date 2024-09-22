@@ -1,0 +1,44 @@
+{
+  "name": "nextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run open-browser && npm run client",
+    "client": "next dev --experimental-https",
+    "open-browser": "start https://localhost:3000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@esotericsoftware/spine-player": "^4.2.59",
+    "@svgr/webpack": "^8.1.0",
+    "@telegram-auth/react": "^1.0.3",
+    "@types/node-telegram-bot-api": "^0.64.6",
+    "@types/telegram-web-app": "^7.2.1",
+    "axios": "^1.7.7",
+    "blob-to-base64": "^1.0.2",
+    "clsx": "^2.1.1",
+    "html-react-parser": "^5.1.10",
+    "next": "14.2.3",
+    "node-telegram-bot-api": "^0.66.0",
+    "react": "^18",
+    "react-copy-to-clipboard": "^5.1.0",
+    "react-countup-animate": "^1.1.2",
+    "react-dom": "^18",
+    "react-hot-toast": "^2.4.1",
+    "react-image-crop": "^11.0.7",
+    "sass": "^1.77.0",
+    "sharp": "^0.33.5",
+    "swiper": "^11.1.14"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-copy-to-clipboard": "^5.0.7",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
+    "typescript": "^5"
+  }
+}
