@@ -9,6 +9,9 @@ export { Referral } from "./ui/Referral";
 export { TopControlArea } from "./ui/TopControlArea";
 export { Navigation } from "./ui/Navigation";
 export { Tabs, Tab } from "./ui/Tabs";
+export { CountdownTimer } from "./ui/CountdownTimer";
+export { Selector } from "./ui/Selector";
+export { Wheel } from "./ui/Wheel";
 
 // sections
 export { Clicker } from "./sections/Clicker";
@@ -23,3 +26,5 @@ export { Rating } from "./sections/Rating";
 export { Account } from "./sections/Account";
 export { Quest } from "./sections/Quest";
 export { Boost } from "./sections/Boost";
+export { Side } from "./sections/Side";
+export { WheelOfFortune } from "./sections/WheelOfFortune";

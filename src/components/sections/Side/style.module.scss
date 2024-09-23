@@ -1,0 +1,71 @@
+.side {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--global-padding);
+
+  &__media {
+    position: relative;
+    padding-top: 80.7%;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 1) 20%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      z-index: 1;
+    }
+
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url("/images/line-overlay.png");
+      background-repeat: repeat-y;
+      z-index: 2;
+    }
+
+    img {
+      object-fit: cover;
+    }
+  }
+
+  &__select {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 3;
+
+    h2 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+  }
+}
+
+.selectors {
+  display: flex;
+  align-items: center;
+  gap: 0 4px;
+
+  & > * {
+    flex: 1;
+  }
+}
+
+.selector {
+}

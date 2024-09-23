@@ -24,10 +24,12 @@
     "node-telegram-bot-api": "^0.66.0",
     "react": "^18",
     "react-copy-to-clipboard": "^5.1.0",
+    "react-countdown": "^2.3.6",
     "react-countup-animate": "^1.1.2",
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
     "react-image-crop": "^11.0.7",
+    "react-slot-counter": "^3.0.1",
     "sass": "^1.77.0",
     "sharp": "^0.33.5",
     "swiper": "^11.1.14"

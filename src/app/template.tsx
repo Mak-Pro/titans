@@ -11,6 +11,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
     "/rating",
     "/account",
     "/quest",
+    "/spin",
   ];
 
   return (
