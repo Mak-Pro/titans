@@ -12,6 +12,7 @@ export { Tabs, Tab } from "./ui/Tabs";
 export { CountdownTimer } from "./ui/CountdownTimer";
 export { Selector } from "./ui/Selector";
 export { Wheel } from "./ui/Wheel";
+export { Tooltip } from "./ui/Tooltip";
 
 // sections
 export { Clicker } from "./sections/Clicker";

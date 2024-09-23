@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
-import { Button } from "@/components";
+import { Button, Tooltip } from "@/components";
 import styles from "./style.module.scss";
 import clsx from "clsx";
 
@@ -221,16 +221,45 @@ export const Wheel = ({
         </div>
         {data.length > 0 && (
           <div className={styles.roulette__actions}>
-            <Button
-              size="medium"
-              variant="filled"
-              bgColor={"var(--button-bg-primary)"}
-              textColor={"var(--button-text-primary)"}
-              radius={0}
-              onClick={handleSlin}
-            >
-              Spin
-            </Button>
+            {finish && (
+              <Tooltip>
+                <>
+                  <h5>You Win</h5>
+                  <h2>
+                    <Image
+                      src={`/icons/coin-icon.svg`}
+                      width={40}
+                      height={40}
+                      alt="coin"
+                    />
+                    {data.filter((slice) => +slice.id === winner)[0].value}
+                  </h2>
+                  <Button
+                    size="medium"
+                    variant="filled"
+                    bgColor={"var(--button-bg-primary)"}
+                    textColor={"var(--button-text-primary)"}
+                    radius={0}
+                    onClick={() => {}}
+                  >
+                    Claim
+                  </Button>
+                </>
+              </Tooltip>
+            )}
+
+            {!finish && (
+              <Button
+                size="medium"
+                variant="filled"
+                bgColor={"var(--button-bg-primary)"}
+                textColor={"var(--button-text-primary)"}
+                radius={0}
+                onClick={handleSlin}
+              >
+                Spin
+              </Button>
+            )}
           </div>
         )}
       </div>
