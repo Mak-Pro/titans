@@ -64,3 +64,8 @@ export interface TopControlAreaProps {
   children?: React.ReactNode;
   backHandler?: () => void;
 }
+
+export interface ProgressProps {
+  light: number;
+  dark: number;
+}

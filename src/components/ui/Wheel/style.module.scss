@@ -119,10 +119,8 @@
       transform: translateX(-50%);
       top: -3px;
       margin-left: -3px;
-
-      img {
-        animation: grow 0.3s ease-in-out forwards;
-      }
+      opacity: 0;
+      visibility: hidden;
 
       span {
         position: absolute;
@@ -134,6 +132,15 @@
         color: var(--black);
         line-height: 1;
         margin-top: -4px;
+      }
+
+      &_show {
+        opacity: 1;
+        visibility: visible;
+
+        img {
+          animation: grow 0.3s ease-in-out forwards;
+        }
       }
     }
   }

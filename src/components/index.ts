@@ -13,6 +13,8 @@ export { CountdownTimer } from "./ui/CountdownTimer";
 export { Selector } from "./ui/Selector";
 export { Wheel } from "./ui/Wheel";
 export { Tooltip } from "./ui/Tooltip";
+export { Note } from "./ui/Note";
+export { Progress } from "./ui/Progress";
 
 // sections
 export { Clicker } from "./sections/Clicker";

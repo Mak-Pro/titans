@@ -1,0 +1,13 @@
+.note {
+  position: relative;
+  border-left: 4px solid var(--green-5);
+  border-top: 1px solid var(--green-5);
+  padding: 10px 15px 10px 10px;
+  font-family: var(--font-chakra-petch);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--green-5);
+  background-color: #21270a;
+  background-image: url("/images/line-overlay.png");
+  background-repeat: repeat-y;
+}

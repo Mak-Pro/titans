@@ -1,12 +1,12 @@
 .side {
   display: flex;
   flex-direction: column;
-  padding-top: var(--global-padding);
 
   &__media {
     position: relative;
     padding-top: 80.7%;
     overflow: hidden;
+    margin: 0 calc(-1 * var(--global-padding));
 
     &::before {
       content: "";
@@ -47,12 +47,14 @@
     bottom: 0;
     left: 0;
     right: 0;
+    padding: 0 var(--global-padding);
     text-align: center;
     z-index: 3;
 
     h2 {
       font-size: 24px;
       font-weight: 600;
+      margin-bottom: 5px;
     }
   }
 }
@@ -61,11 +63,9 @@
   display: flex;
   align-items: center;
   gap: 0 4px;
+  margin-top: 25px;
 
   & > * {
     flex: 1;
   }
-}
-
-.selector {
 }

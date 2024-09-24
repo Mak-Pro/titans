@@ -110,19 +110,20 @@ export const Wheel = ({
           className={styles.roulette__section_overlay}
           ref={rouletteInner}
         />
-        {finish && (
-          <div className={styles.roulette__section_winner_info}>
-            <Image
-              src={"/icons/wheel-win-slice.svg"}
-              width={125}
-              height={71}
-              alt="winner-slice"
-            />
-            <span>
-              +{data.filter((slice) => +slice.id === winner)[0].value}
-            </span>
-          </div>
-        )}
+        <div
+          className={clsx(
+            styles.roulette__section_winner_info,
+            finish && styles.roulette__section_winner_info_show
+          )}
+        >
+          <Image
+            src={"/icons/wheel-win-slice.svg"}
+            width={125}
+            height={71}
+            alt="winner-slice"
+          />
+          <span>+{data.filter((slice) => +slice.id === winner)[0].value}</span>
+        </div>
 
         <div className={styles.roulette__section_spinner}>
           <div className={styles.roulette__section_spinner_inner}>

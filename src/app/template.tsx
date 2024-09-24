@@ -12,6 +12,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
     "/account",
     "/quest",
     "/spin",
+    "/side",
   ];
 
   return (
