@@ -19,6 +19,7 @@
     "axios": "^1.7.7",
     "blob-to-base64": "^1.0.2",
     "clsx": "^2.1.1",
+    "framer-motion": "^11.7.0",
     "html-react-parser": "^5.1.10",
     "next": "14.2.3",
     "node-telegram-bot-api": "^0.66.0",

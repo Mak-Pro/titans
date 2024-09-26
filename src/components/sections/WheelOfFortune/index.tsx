@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 import { Wheel, Spacer } from "@/components";
 import styles from "./style.module.scss";
 
@@ -25,6 +26,39 @@ export const WheelOfFortune = () => {
 
   const winner = Math.floor(Math.random() * roulette.length);
 
+  const [wheelPlayer, setWheelPlayer] = useState<any>(null);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "/scripts/spine-player.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    script.onload = () => {
+      const spine = (window as any).spine;
+
+      // grid animation
+      if (spine) {
+        const wheelPlayer = new spine.SpinePlayer("wheel-outer", {
+          skeleton: "/data/animations/wheel.json",
+          atlas: "/data/animations/wheel.atlas",
+          animation: "animation",
+          showControls: false,
+          showLoading: false,
+          alpha: true,
+          success: (player: any) => {
+            console.log("Spine animation loaded successfully");
+            setWheelPlayer(player);
+          },
+        });
+      }
+    };
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   return (
     <>
       <div className={styles.wheel}>
@@ -44,12 +78,13 @@ export const WheelOfFortune = () => {
             alt="grid"
             className={styles.wheel__box_grid}
           />
+          <div id="wheel-outer" className={styles.wheel__box_outer}></div>
           <Image
-            src="/icons/wheel-outer.svg"
+            src="/icons/wheel-outer-static.svg"
             width={358}
             height={370}
             alt="outer"
-            className={styles.wheel__box_outer}
+            className={styles.wheel__box_outer_static}
           />
           <Wheel
             data={roulette.reverse()}

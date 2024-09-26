@@ -79,7 +79,7 @@ export const Button = ({
         className && className
       )}
       style={{
-        color: clsx(textColor ? textColor : "var(----black)"),
+        color: clsx(textColor ? textColor : "var(--black)"),
         backgroundColor: clsx(
           variant === "filled" && bgColor ? bgColor : "transparent"
         ),

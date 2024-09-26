@@ -1,0 +1,172 @@
+.select {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  padding-bottom: var(--global-bottom-padding);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--global-padding) 0;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    flex: 1;
+
+    &_content {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: 0 10px;
+    position: relative;
+    z-index: 1;
+
+    button {
+      flex: 1;
+    }
+  }
+
+  &__user {
+    display: inline-flex;
+    align-items: center;
+    gap: 0 8px;
+
+    &_avatar {
+      min-width: 42px;
+      max-width: 42px;
+      min-height: 42px;
+      max-height: 42px;
+      position: relative;
+
+      &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        border: 1px solid var(--stroke-accent);
+        z-index: 1;
+      }
+
+      &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        z-index: 2;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        border: 1px solid var(--stroke-dark);
+        clip-path: polygon(
+          1px 1px,
+          8px 1px,
+          8px 0,
+          calc(100% - 8px) 0,
+          calc(100% - 8px) 1px,
+          calc(100% - 1px) 1px,
+          calc(100% - 1px) 8px,
+          100% 8px,
+          100% calc(100% - 8px),
+          calc(100% - 1px) calc(100% - 8px),
+          calc(100% - 1px) calc(100% - 1px),
+          calc(100% - 8px) calc(100% - 1px),
+          calc(100% - 8px) 100%,
+          8px 100%,
+          8px calc(100% - 1px),
+          1px calc(100% - 1px),
+          1px calc(100% - 8px),
+          0 calc(100% - 8px),
+          0 8px,
+          1px 8px
+        );
+      }
+
+      img {
+        object-fit: cover;
+      }
+    }
+
+    &_text {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 3px 0;
+    }
+
+    &_title {
+    }
+
+    &_coins {
+      display: inline-flex;
+      align-items: center;
+      gap: 0 5px;
+      font-family: var(--font-chakra-petch);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+  }
+
+  &__robot {
+    position: relative;
+    flex: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+
+    video {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+
+  &__slider {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    & > div {
+      &:nth-child(1) {
+        flex: 1;
+
+        & > div {
+          height: auto;
+          position: relative;
+        }
+      }
+    }
+  }
+}
+
+.storyboard__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0 4px;
+  font-family: var(--font-chakra-petch);
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  padding: 5px 0;
+}

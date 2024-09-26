@@ -69,3 +69,21 @@ export interface ProgressProps {
   light: number;
   dark: number;
 }
+
+export interface CardProps {
+  position?: number | string;
+  image?: string;
+  subtitle?: string;
+  title?: string;
+  text?: string;
+  button?: {
+    text: string;
+    link?: string;
+    onClick?: () => void;
+  };
+  location: {
+    x: number;
+    y: number;
+  };
+  blocked: boolean;
+}

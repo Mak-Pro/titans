@@ -317,12 +317,64 @@ nav {
 }
 
 .swiper-pagination-horizontal {
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   .swiper-pagination-bullet {
+    flex: 1;
+    display: inline-block;
+    height: 2px;
+    background-color: var(--stroke-dark);
+    border-radius: 0;
+    opacity: 1;
+    margin: 0 !important;
     transition: all 0.3s ease 0s;
     &-active {
       background-color: var(--stroke-light);
     }
   }
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  width: 48px;
+  height: 48px;
+  background-color: #21272d;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  cursor: pointer;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.3s ease 0s;
+
+  &.swiper-button-disabled {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.swiper-button-prev {
+  left: 0;
+  background-image: url("/icons/angle-left-icon.svg");
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+}
+
+.swiper-button-next {
+  right: 0;
+  background-image: url("/icons/angle-right-icon.svg");
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    0 100%
+  );
 }
 
 .ReactCrop__child-wrapper {

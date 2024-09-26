@@ -15,6 +15,7 @@ export { Wheel } from "./ui/Wheel";
 export { Tooltip } from "./ui/Tooltip";
 export { Note } from "./ui/Note";
 export { Progress } from "./ui/Progress";
+export { Card } from "./ui/Card";
 
 // sections
 export { Clicker } from "./sections/Clicker";
@@ -31,3 +32,5 @@ export { Quest } from "./sections/Quest";
 export { Boost } from "./sections/Boost";
 export { Side } from "./sections/Side";
 export { WheelOfFortune } from "./sections/WheelOfFortune";
+export { Select } from "./sections/Select";
+export { Play } from "./sections/Play";

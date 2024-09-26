@@ -1,9 +1,33 @@
 .boost {
-  display: flex;
-  flex-direction: column;
+  padding-top: var(--global-padding);
   height: calc($tgViewportHeight - var(--global-nav-bottom-padding));
   overflow: hidden;
-  gap: 16px 0;
+
+  &__slider {
+    height: 100%;
+
+    & > div {
+      &:not(:first-child) {
+        top: 0;
+        transform: translateY(0);
+        margin-top: 37.5%;
+      }
+
+      &:nth-last-child(1) {
+        right: 8px;
+      }
+
+      &:nth-last-child(2) {
+        left: 8px;
+      }
+    }
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
 
   &__media {
     position: relative;

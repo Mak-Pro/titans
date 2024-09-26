@@ -4,8 +4,8 @@ import { usePathname } from "next/navigation";
 import HomeIcon from "@public/icons/nav-home-icon.svg";
 import BoostIcon from "@public/icons/nav-boost-icon.svg";
 import QuestIcon from "@public/icons/nav-quest-icon.svg";
-import FriendsIcon from "@public/icons/nav-referal-icon.svg";
-import RatingIcon from "@public/icons/nav-quest-icon.svg";
+import ReferralIcon from "@public/icons/nav-referral-icon.svg";
+import RatingIcon from "@public/icons/nav-rating-icon.svg";
 import styles from "./style.module.scss";
 import clsx from "clsx";
 
@@ -13,7 +13,7 @@ const navigationItems = [
   { link: "/boost", icon: <BoostIcon />, text: "Boost" },
   { link: "/quest", icon: <QuestIcon />, text: "Quest" },
   { link: "/", icon: <HomeIcon />, text: "Home" },
-  { link: "/friends", icon: <FriendsIcon />, text: "Friends" },
+  { link: "/referral", icon: <ReferralIcon />, text: "Referral" },
   { link: "/rating", icon: <RatingIcon />, text: "Rating" },
 ];
 
