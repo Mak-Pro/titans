@@ -37,29 +37,28 @@ export const Chapter = () => {
         </div>
         <div className={`${styles.chapter__content_body}  title-list-body`}>
           <h6>Premise</h6>
-
           <p>
             After a catastrophic plane crash over the Transantarctic Mountains,
             a lone survivor is saved by a shadowy organization known as the
             Obsidian Circle. This secret order has been active in society for
             centuries, guarding ancient knowledge and technology passed down
             from the Aeternum civilization. Their mission: to prepare for the
-            return of the Xar'ul, a parasitic alien race that once ravaged the
-            galaxy, draining entire worlds of their life force to sustain their
-            existence. The Obsidian Circle takes the survivor to a hidden
+            return of the Xar&apos;ul, a parasitic alien race that once ravaged
+            the galaxy, draining entire worlds of their life force to sustain
+            their existence. The Obsidian Circle takes the survivor to a hidden
             complex beneath the ice, where ancient Titans—colossal war machines
             created by the Aeternum—are buried. These Titans were designed to
-            fend off the Xar'ul, who were nearly defeated by the Aeternum
-            millennia ago. However, a few Xar'ul survivors escaped and have
+            fend off the Xar&apos;ul, who were nearly defeated by the Aeternum
+            millennia ago. However, a few Xar&apos;ul survivors escaped and have
             since wandered the galaxy in search of a way to reclaim their lost
             power. When the player, now aligned with the Obsidian Circle,
             activates the first Titan, a massive energy burst reverberates
-            across space, alerting the Xar'ul to Earth’s location. Sensing an
-            opportunity, the Xar'ul dispatch shapeshifters to Earth to confront
-            the player, offering a chilling choice: join them in dominating the
-            planet, or face annihilation. The player must decide whether to
-            stand with the Obsidian Circle to protect humanity or betray them
-            and align with the Xar'ul for power.
+            across space, alerting the Xar&apos;ul to Earth’s location. Sensing
+            an opportunity, the Xar&apos;ul dispatch shapeshifters to Earth to
+            confront the player, offering a chilling choice: join them in
+            dominating the planet, or face annihilation. The player must decide
+            whether to stand with the Obsidian Circle to protect humanity or
+            betray them and align with the Xar&apos;ul for power.
           </p>
         </div>
       </div>
