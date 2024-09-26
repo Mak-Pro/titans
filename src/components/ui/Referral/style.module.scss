@@ -3,13 +3,13 @@
   flex-direction: column;
   background-color: var(--fill-item);
   padding: 8px;
-  max-width: 120px;
   gap: 8px 0;
   width: 100%;
 
   &__header {
     display: flex;
     gap: 0 8px;
+    justify-content: space-between;
   }
 
   &__avatar {

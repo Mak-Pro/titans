@@ -1,10 +1,8 @@
 "use client";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useContext } from "react";
 import { Board, Spacer, Button, Slot, Referral } from "@/components";
 import styles from "./style.module.scss";
-import Link from "next/link";
 import CopyToClipboard from "react-copy-to-clipboard";
 import toast from "react-hot-toast";
 import { useTelegram } from "@/providers/telegram";
@@ -12,7 +10,6 @@ import { userAxios } from "@/api";
 import AppContext from "@/providers/context";
 import TelegramIcon from "@public/icons/telegram-icon-alt.svg";
 import LinkIcon from "@public/icons/link-icon.svg";
-// import { gtagEvent } from "@/helpers";
 
 export const Friends = () => {
   const router = useRouter();
@@ -22,7 +19,7 @@ export const Friends = () => {
   const [points, setPoints] = useState(0);
   const [invites, setInvites] = useState(0);
   const [friends, setFriends] = useState<any[]>([]);
-  const [referralLink, setReferralLink] = useState("");
+  const [referralLink, setReferralLink] = useState("referral link");
 
   useEffect(() => {
     if (user) {
@@ -148,16 +145,25 @@ export const Friends = () => {
           <TelegramIcon />
           Invite a Friends
         </Button>
-        <Button
-          size="large"
-          variant="filled"
-          bgColor={"var(--button-bg-disabled)"}
-          textColor={"var(--button-bg-primary)"}
-          onClick={() => {}}
-          radius={0}
+        <CopyToClipboard
+          text={referralLink}
+          onCopy={() => {
+            toast.success("Link Copied", {
+              id: "referal_copy",
+            });
+          }}
         >
-          <LinkIcon />
-        </Button>
+          <Button
+            size="large"
+            variant="filled"
+            bgColor={"var(--button-bg-disabled)"}
+            textColor={"var(--button-bg-primary)"}
+            onClick={() => {}}
+            radius={0}
+          >
+            <LinkIcon />
+          </Button>
+        </CopyToClipboard>
       </div>
     </>
   );

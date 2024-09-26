@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./style.module.scss";
-import { Button } from "@/components";
+import { Button, NumberBadge } from "@/components";
 import { BoardProps } from "@/Types";
 import clsx from "clsx";
 
@@ -103,15 +103,23 @@ export const Board = ({
             </Button>
           )}
           {rate && (
-            <div className={styles.board__rate}>
-              <Image
-                src="/icons/rate-icon.svg"
-                width={37}
-                height={32}
-                alt="rate"
-              />{" "}
-              <span>{rate.position}</span>{" "}
-            </div>
+            <NumberBadge
+              number={rate.position}
+              borderColor={clsx(
+                rate.position === 1 && "#32A086",
+                rate.position === 2 && "#C57032",
+                rate.position === 3 && "#809198"
+              )}
+            />
+            // <div className={styles.board__rate}>
+            //   <Image
+            //     src="/icons/rate-icon.svg"
+            //     width={37}
+            //     height={32}
+            //     alt="rate"
+            //   />{" "}
+            //   <span>{rate.position}</span>{" "}
+            // </div>
           )}
         </div>
       </div>

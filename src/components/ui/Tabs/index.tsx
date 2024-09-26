@@ -10,9 +10,10 @@ interface TabProps {
 
 interface TabsProps {
   children: React.ReactElement<TabProps>[];
+  className?: string;
 }
 
-export const Tabs = ({ children }: TabsProps) => {
+export const Tabs = ({ children, className }: TabsProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleTabClick = (index: number) => {
@@ -20,7 +21,7 @@ export const Tabs = ({ children }: TabsProps) => {
   };
 
   return (
-    <div className={styles.tabs}>
+    <div className={clsx(styles.tabs, className && className)}>
       <div className={styles.tabs__controls}>
         {children.map((tab, index) => (
           <button

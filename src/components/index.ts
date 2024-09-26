@@ -16,6 +16,7 @@ export { Tooltip } from "./ui/Tooltip";
 export { Note } from "./ui/Note";
 export { Progress } from "./ui/Progress";
 export { Card } from "./ui/Card";
+export { NumberBadge } from "./ui/NumberBadge";
 
 // sections
 export { Clicker } from "./sections/Clicker";

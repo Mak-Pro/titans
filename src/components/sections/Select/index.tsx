@@ -54,7 +54,7 @@ export const Select = () => {
             slidesPerView={1}
             spaceBetween={16}
             navigation={{}}
-            loop={false}
+            loop={true}
           >
             {robots.map((robot) => (
               <SwiperSlide key={robot.id}>
