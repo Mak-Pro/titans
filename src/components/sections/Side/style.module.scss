@@ -57,6 +57,14 @@
       margin-bottom: 5px;
     }
   }
+
+  &__actions {
+    bottom: var(--global-bottom-padding);
+
+    button {
+      width: 100%;
+    }
+  }
 }
 
 .selectors {
@@ -67,5 +75,16 @@
 
   & > * {
     flex: 1;
+  }
+}
+
+.selector {
+  opacity: 0.5;
+  filter: grayscale(1);
+  transition: all 0.3s ease 0s;
+
+  &__active {
+    opacity: 1;
+    filter: none;
   }
 }

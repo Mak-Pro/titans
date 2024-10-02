@@ -33,6 +33,18 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "titans-api-dev.techchaininnovations.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "titans-api-dev.techchaininnovations.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 

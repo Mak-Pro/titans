@@ -2,14 +2,7 @@
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import SlotCounter from "react-slot-counter";
 import styles from "./style.module.scss";
-
-export interface CountdownTimerProps {
-  showDays?: boolean;
-  showHours?: boolean;
-  showMinutes?: boolean;
-  showSeconds?: boolean;
-  note?: string;
-}
+import { CountdownTimerProps } from "@/Types";
 
 export const CountdownTimer = ({
   showDays = true,
@@ -17,8 +10,8 @@ export const CountdownTimer = ({
   showMinutes = true,
   showSeconds = true,
   note,
+  targetDate,
 }: CountdownTimerProps) => {
-  const targetDate = new Date("2024-09-31T19:00:00");
   const timer = ({
     days,
     hours,
@@ -43,7 +36,7 @@ export const CountdownTimer = ({
               <>
                 <div>
                   <SlotCounter
-                    value={String(days).length > 1 ? days : `0${days}`}
+                    value={String(days).length > 1 ? +days : `0${+days}`}
                     sequentialAnimationMode
                     useMonospaceWidth
                   />
@@ -57,7 +50,7 @@ export const CountdownTimer = ({
               <>
                 <div>
                   <SlotCounter
-                    value={String(hours).length > 1 ? hours : `0${hours}`}
+                    value={String(hours).length > 1 ? +hours : `0${+hours}`}
                     sequentialAnimationMode
                     useMonospaceWidth
                   />
@@ -71,7 +64,9 @@ export const CountdownTimer = ({
               <>
                 <div>
                   <SlotCounter
-                    value={String(minutes).length > 1 ? minutes : `0${minutes}`}
+                    value={
+                      String(minutes).length > 1 ? +minutes : `0${+minutes}`
+                    }
                     sequentialAnimationMode
                     useMonospaceWidth
                     dummyCharacterCount={0}
@@ -86,7 +81,9 @@ export const CountdownTimer = ({
                 <span>:</span>
                 <div>
                   <SlotCounter
-                    value={String(seconds).length > 1 ? seconds : `0${seconds}`}
+                    value={
+                      String(seconds).length > 1 ? +seconds : `0${+seconds}`
+                    }
                     sequentialAnimationMode
                     useMonospaceWidth
                     dummyCharacterCount={0}

@@ -2,16 +2,28 @@
 import Image from "next/image";
 import styles from "./style.module.scss";
 import Schema from "@public/images/schema-overlay.svg";
+import clsx from "clsx";
 
 interface SelectorProps {
   icon?: React.ReactNode;
   text?: string;
   color?: string;
+  className?: string;
+  onClick?: () => void;
 }
 
-export const Selector = ({ icon, text, color = "#5F676F" }: SelectorProps) => {
+export const Selector = ({
+  icon,
+  text,
+  color = "#5F676F",
+  className,
+  onClick,
+}: SelectorProps) => {
   return (
-    <div className={styles.selector}>
+    <div
+      className={clsx(styles.selector, className && className)}
+      onClick={onClick ? onClick : () => {}}
+    >
       <span
         className={styles.selector__border}
         style={{ backgroundColor: color }}

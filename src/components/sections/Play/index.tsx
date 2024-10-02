@@ -4,57 +4,73 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./style.module.scss";
 import { TopControlArea } from "@/components/ui/TopControlArea";
-import { numberFormatter } from "@/helpers";
 import clsx from "clsx";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useTelegram } from "@/providers/telegram";
+import { gameController } from "@/api";
+import { GameInfoProps } from "@/Types";
 
 interface TouchPoint {
-  id: number;
-  x: number;
-  y: number;
+  id: string;
 }
 
 const progressPoints = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100].reverse();
 
 export const Play = () => {
+  const { user } = useTelegram();
   const router = useRouter();
+  const [gameInfo, setGameInfo] = useState<GameInfoProps | null>(null);
   const [score, setScore] = useState(0);
-  const [percent, setPercent] = useState(40);
+  const [percent, setPercent] = useState(0);
   const [player, setPlayer] = useState<any>(null);
-  const [touchPoints, setTouchPoints] = useState<TouchPoint[]>([]);
 
+  const tapAreaRef = useRef<HTMLDivElement>(null);
   const [currentAnimation, setCurrentAnimation] = useState("idle");
   const [isTapping, setIsTapping] = useState(false);
+  const [touchPoints, setTouchPoints] = useState<TouchPoint[]>([]);
   const [lastTapTime, setLastTapTime] = useState(0);
+  const [end, setEnd] = useState(false);
 
   // touchstart
-  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
-    const newTouchPoints: any = Array.from(event.changedTouches).map(
-      (touch) => {
-        return {
-          id: `${touch.identifier}-${Date.now()}`,
-          x: touch.clientX,
-          y: touch.clientY,
-        };
+  const handleTouchStart = () => {
+    if (gameInfo) {
+      if (percent < 99.99) {
+        setScore(
+          (prevScore) =>
+            prevScore +
+            gameInfo.points / Math.ceil(gameInfo.points / gameInfo.clickValue)
+        );
+        setPercent(
+          (prev) =>
+            prev + 100 / Math.ceil(gameInfo.points / gameInfo.clickValue)
+        );
+
+        if (player && currentAnimation === "idle") {
+          player.setAnimation("run", true);
+          setCurrentAnimation("tap");
+        }
+      } else {
+        setIsTapping(false);
+        setEnd(true);
+
+        if (user) {
+          gameController("/games/farm", { telegramId: user?.id }).then(() => {
+            router.replace("/farming");
+          });
+        }
       }
-    );
-    setTouchPoints((prevPoints) => [...prevPoints, ...newTouchPoints]);
-    setScore((prevScore) => prevScore + event.changedTouches.length);
 
-    setTimeout(() => {
-      setTouchPoints((prevPoints) =>
-        prevPoints.filter(
-          (point) =>
-            !newTouchPoints.some(
-              (newPoint: TouchPoint) => newPoint.id === point.id
-            )
-        )
-      );
-    }, 1100);
+      const newTouchPoint: TouchPoint = {
+        id: `${Date.now()}-${Math.random()}`,
+      };
 
-    if (player && currentAnimation === "idle") {
-      player.setAnimation("run", true);
-      setCurrentAnimation("tap");
+      setTouchPoints((prevPoints) => [...prevPoints, newTouchPoint]);
+
+      setTimeout(() => {
+        setTouchPoints((prevPoints) =>
+          prevPoints.filter((point) => point.id !== newTouchPoint.id)
+        );
+      }, 1000);
     }
   };
 
@@ -130,15 +146,31 @@ export const Play = () => {
 
     const tapTimeout = setInterval(handleTimeout, 200);
 
-    document.addEventListener("touchstart", handleTapStart);
-    document.addEventListener("touchend", handleTapEnd);
+    if (tapAreaRef.current) {
+      tapAreaRef.current.addEventListener("touchstart", handleTapStart);
+      tapAreaRef.current.addEventListener("touchend", handleTapEnd);
+      // tapAreaRef.current.addEventListener("mousedown", handleTapStart);
+      // tapAreaRef.current.addEventListener("mouseup", handleTapEnd);
+    }
 
     return () => {
       clearInterval(tapTimeout);
-      document.removeEventListener("touchstart", handleTapStart);
-      document.removeEventListener("touchend", handleTapEnd);
+      if (tapAreaRef.current) {
+        tapAreaRef.current.removeEventListener("touchstart", handleTapStart);
+        tapAreaRef.current.removeEventListener("touchend", handleTapEnd);
+        // tapAreaRef.current.removeEventListener("mousedown", handleTapStart);
+        // tapAreaRef.current.removeEventListener("mouseup", handleTapEnd);
+      }
     };
   }, [lastTapTime]);
+
+  useEffect(() => {
+    if (user) {
+      gameController("/games/info", { telegramId: user.id }).then((data) => {
+        setGameInfo(data);
+      });
+    }
+  }, [user]);
 
   return (
     <>
@@ -146,13 +178,14 @@ export const Play = () => {
       <div className={styles.play}>
         <div className={styles.play__stats}>
           <div>
-            <span>Power</span> {0}/{180}
+            <span>Power</span> {Math.round(score)}/
+            {gameInfo ? gameInfo.points : 0}
           </div>
           <div>
-            <span>Agility</span> {0}
+            <span>Agility</span> {gameInfo ? gameInfo.clickValue : 0}
           </div>
           <div>
-            <span>Stamina</span> {3600} ml/H
+            <span>Stamina</span> {gameInfo ? gameInfo.farmingTime : 0} ml/H
           </div>
         </div>
         <div className={styles.play__score}>
@@ -163,13 +196,14 @@ export const Play = () => {
               height={32}
               alt="score"
             />{" "}
-            {numberFormatter(score)}
+            {Math.round(score)} / {gameInfo ? gameInfo.points : 0}
           </div>
         </div>
         <div
-          className={styles.play__action}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
+          className={clsx(
+            styles.play__action,
+            end && styles.play__action_inactive
+          )}
         >
           <div className={styles.progress}>
             <div className={styles.progress__bar}>
@@ -178,35 +212,47 @@ export const Play = () => {
                   key={point}
                   className={clsx(
                     styles.progress__bar_point,
-                    point <= percent && styles.progress__bar_point_active
+                    point <= Math.round(percent) &&
+                      styles.progress__bar_point_active
                   )}
                 ></span>
               ))}
             </div>
-            <div className={styles.progress__percent}>{percent}%</div>
+            <div className={styles.progress__percent}>
+              {Math.round(percent)}%
+            </div>
           </div>
-          <div id="robot" className={styles.play__action_robot}></div>
+          <div id="robot" className={styles.play__action_robot}>
+            <div
+              ref={tapAreaRef}
+              className={styles.tap__area}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              // onMouseDown={handleTouchStart}
+              // onMouseUp={handleTouchEnd}
+            >
+              <AnimatePresence mode="popLayout">
+                {touchPoints.map((touch) => (
+                  <motion.div
+                    key={touch.id}
+                    className={styles.tap__area_point}
+                    initial={{ scale: 0, y: 0, x: "-50%", opacity: 0 }}
+                    animate={{
+                      opacity: [0, 1, 0],
+                      scale: [0, 1, 0],
+                      y: [0, -80, -120],
+                    }}
+                    transition={{ duration: 1 }}
+                  >
+                    +{gameInfo?.clickValue}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          </div>
           <div id="tap" className={styles.play__action_tap}></div>
         </div>
       </div>
-      <AnimatePresence mode="popLayout">
-        {touchPoints.map((touch: TouchPoint) => (
-          <motion.div
-            key={touch.id}
-            className={styles.play__action_point}
-            style={{
-              left: touch.x,
-              top: touch.y,
-            }}
-            initial={{ scale: 0, y: 0 }}
-            animate={{ scale: [0, 1, 0], y: [-10, -40, -120] }}
-            // exit={{ opacity: 0, scale: 0, y: -90 }}
-            transition={{ duration: 1 }}
-          >
-            +1
-          </motion.div>
-        ))}
-      </AnimatePresence>
     </>
   );
 };

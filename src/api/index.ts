@@ -1,6 +1,8 @@
 import axios, { AxiosError } from "axios";
+import { API } from "@/constants";
+import { RegisterDataProps, TitanAttributes } from "@/Types";
 
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_API;
+axios.defaults.baseURL = API;
 
 const getToken = () => {
   return sessionStorage.getItem("token");
@@ -42,46 +44,38 @@ export const apiErrors = {
 
 // functions
 
-export const checkUser = async (id: number) => {
+export const loginUser = async (initData: string) => {
   try {
-    const response = await userAxios.post(
-      "/check-user",
-      JSON.stringify({
-        "uuid": id,
-      })
-    );
+    const response = await userAxios.post(`/auth/telegram/login`, { initData });
     const {
+      data: { accessToken },
       status,
-      data: { success, data },
     } = response;
-
-    return { status, success, data };
+    sessionStorage.setItem("token", `Bearer ${accessToken}`);
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      return handleAxiosError(error, apiErrors.check);
+      return handleAxiosError(error, error.message);
     }
   }
 };
 
-export const registerUser = async (user: WebAppUser) => {
-  const data = JSON.stringify({
-    uuid: user.id,
-    username: user.username,
-    first_name: user.first_name,
-    last_name: user.last_name,
-    photo_url: null,
-  });
-
+export const checkUser = async (telegramId: number) => {
   try {
-    const response = await userAxios.post("/auth", data);
-    const {
-      status,
-      data: {
-        data: { token_type, access_token },
-      },
-    } = response;
-    sessionStorage.setItem("token", `${token_type} ${access_token}`);
-    return status;
+    const response = await userAxios.get(
+      `/users/verify/telegramId/${telegramId}`
+    );
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return handleAxiosError(error, error.message);
+    }
+  }
+};
+
+export const registerUser = async (data: RegisterDataProps) => {
+  try {
+    const response = await userAxios.post("/users", data);
+    return response;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       return handleAxiosError(error, apiErrors.register);
@@ -101,14 +95,137 @@ export const deleteUser = async () => {
   }
 };
 
-export const infoUser = async () => {
+export const infoUser = async (telegramId: number) => {
   try {
-    const response = await userAxios.get("/user/info");
+    const response = await userAxios.get(`/users/${telegramId}`);
+    const { data } = response;
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return handleAxiosError(error, apiErrors.info);
+    }
+  }
+};
+
+export const checkUserName = async (username: string) => {
+  try {
+    const response = await userAxios.get(`/users/verify/username/${username}`);
     const {
+      data: { usernameExists },
       status,
-      data: { success, data },
     } = response;
-    return { status, success, data };
+    return usernameExists;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return handleAxiosError(error, apiErrors.info);
+    }
+  }
+};
+
+export const referralUser = async (telegramId: number) => {
+  try {
+    const response = await userAxios.get(`/users/${telegramId}/referral`);
+    const { data } = response;
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return handleAxiosError(error, apiErrors.info);
+    }
+  }
+};
+
+export const friendsUser = async (telegramId: number) => {
+  try {
+    const response = await userAxios.get(`/users/${telegramId}/friends`);
+    const { data } = response;
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return handleAxiosError(error, apiErrors.info);
+    }
+  }
+};
+
+export const titansUser = async (telegramId: number) => {
+  try {
+    const response = await userAxios.get(`/users/${telegramId}/titans`);
+    const { data } = response;
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return handleAxiosError(error, apiErrors.info);
+    }
+  }
+};
+
+export const questsUser = async (telegramId: number) => {
+  try {
+    const response = await userAxios.get(`/users/${telegramId}/quests`);
+    const { data } = response;
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return handleAxiosError(error, apiErrors.info);
+    }
+  }
+};
+
+export const questCompleteUser = async (
+  telegramId: number,
+  data: { questId: number }
+) => {
+  try {
+    const response = await userAxios.post(
+      `/users/${telegramId}/quests/complete`,
+      data
+    );
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return handleAxiosError(error, apiErrors.register);
+    }
+  }
+};
+
+export const referralsUser = async (data: {
+  referral: string;
+  telegramId: number;
+}) => {
+  try {
+    const response = await userAxios.post("/referrals", data);
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return handleAxiosError(error, apiErrors.register);
+    }
+  }
+};
+
+// GAME
+export const gameController = async (
+  url: string,
+  data: { telegramId: number }
+) => {
+  try {
+    const response = await userAxios.post(url, data);
+    const { data: gameData } = response;
+    return gameData;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return handleAxiosError(error, apiErrors.register);
+    }
+  }
+};
+
+// TITANS
+
+export const titanUpdate = async (
+  telegramId: number,
+  data: { attribute: TitanAttributes }
+) => {
+  try {
+    const response = await userAxios.put(`/titans/${telegramId}`, data);
+    return response;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       return handleAxiosError(error, apiErrors.info);

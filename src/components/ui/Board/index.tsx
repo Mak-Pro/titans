@@ -1,9 +1,11 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+import { useTelegram } from "@/providers/telegram";
 import styles from "./style.module.scss";
 import { Button, NumberBadge } from "@/components";
 import { BoardProps } from "@/Types";
+import { questCompleteUser } from "@/api";
 import clsx from "clsx";
 
 export const Board = ({
@@ -19,13 +21,19 @@ export const Board = ({
   note,
   position,
   mainLink,
+  bonus,
+  done,
+  questId,
+  callBack,
 }: BoardProps) => {
+  const { user } = useTelegram();
   return (
     <div
       className={clsx(
         styles.board,
         type === "alt" && styles.board__alt,
-        type === "person" && styles.board__person
+        type === "person" && styles.board__person,
+        done && styles.board__done
       )}
     >
       {mainLink && (
@@ -38,7 +46,8 @@ export const Board = ({
           className={clsx(
             styles.board__media,
             type === "alt" && styles.board__media_alt,
-            type === "person" && styles.board__media_person
+            type === "person" && styles.board__media_person,
+            type === "invite" && styles.board__media_invite
           )}
         >
           {type === "alt" && position && (
@@ -49,8 +58,8 @@ export const Board = ({
           {icon && (
             <Image
               src={icon}
-              width={type === "person" ? 32 : 48}
-              height={type === "person" ? 32 : 48}
+              width={type === "person" || type === "invite" ? 32 : 48}
+              height={type === "person" || type === "invite" ? 32 : 48}
               alt="icon"
             />
           )}
@@ -90,17 +99,45 @@ export const Board = ({
           </div>
         </div>
         <div className={styles.board__right_side}>
-          {button && (
+          {done && (
+            <Image
+              src="/icons/check-icon.svg"
+              width={22}
+              height={18}
+              alt="done"
+            />
+          )}
+
+          {button && !done && (
             <Button
               variant="outlined"
               size="small"
               textColor="var(--button-bg-primary)"
               radius={0}
               href={button.link}
+              target="_blank"
+              linkClick={() => {
+                if (user && questId) {
+                  questCompleteUser(user.id, { questId });
+                  callBack && callBack();
+                }
+              }}
             >
               {" "}
               Start
             </Button>
+          )}
+          {type === "invite" && (
+            <div className={styles.board__bonus}>
+              {bonus ? `+${bonus}k` : 0}
+
+              <Image
+                src="/icons/coin-icon-alt.svg"
+                width={20}
+                height={20}
+                alt="bonus"
+              />
+            </div>
           )}
           {rate && (
             <NumberBadge
@@ -111,15 +148,6 @@ export const Board = ({
                 rate.position === 3 && "#809198"
               )}
             />
-            // <div className={styles.board__rate}>
-            //   <Image
-            //     src="/icons/rate-icon.svg"
-            //     width={37}
-            //     height={32}
-            //     alt="rate"
-            //   />{" "}
-            //   <span>{rate.position}</span>{" "}
-            // </div>
           )}
         </div>
       </div>

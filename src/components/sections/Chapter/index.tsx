@@ -2,7 +2,6 @@
 import Image from "next/image";
 import { Button } from "@/components";
 import styles from "./style.module.scss";
-import clsx from "clsx";
 
 export const Chapter = () => {
   return (
@@ -17,6 +16,8 @@ export const Chapter = () => {
           textColor="var(--button-text-primary)"
           bgColor="var(--button-bg-primary)"
           radius={0}
+          href="/"
+          target="_self"
         >
           Play
         </Button>
@@ -26,6 +27,8 @@ export const Chapter = () => {
           textColor="var(--button-bg-primary)"
           bgColor="var(--button-bg-primary)"
           radius={0}
+          href="/boost"
+          target="_self"
         >
           Upgrade
         </Button>

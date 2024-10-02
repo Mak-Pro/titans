@@ -1,6 +1,10 @@
 .cropper {
+  position: relative;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
   gap: 20px 0;
   flex: 1;
 
@@ -13,7 +17,31 @@
   }
 
   &__preview {
-    position: relative;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    bottom: 90px;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    & > * {
+      max-height: 100%;
+
+      & > * {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        & > img {
+          max-height: 100%;
+        }
+      }
+    }
   }
 
   &__result {
@@ -25,6 +53,7 @@
   }
 
   &__actions {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 8px 0;

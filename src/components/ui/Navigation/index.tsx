@@ -13,7 +13,7 @@ const navigationItems = [
   { link: "/boost", icon: <BoostIcon />, text: "Boost" },
   { link: "/quest", icon: <QuestIcon />, text: "Quest" },
   { link: "/", icon: <HomeIcon />, text: "Home" },
-  { link: "/referral", icon: <ReferralIcon />, text: "Referral" },
+  { link: "/friends", icon: <ReferralIcon />, text: "Referral" },
   { link: "/rating", icon: <RatingIcon />, text: "Rating" },
 ];
 

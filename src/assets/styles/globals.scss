@@ -417,13 +417,13 @@ nav {
 }
 
 .toaster-container {
-  z-index: 45 !important;
+  // z-index: 45 !important;
 
   &-info {
     width: 100%;
     position: relative;
-    bottom: 70px;
     max-width: 100% !important;
+    top: var(--global-bottom-padding) !important;
 
     &::before {
       content: "";
@@ -433,7 +433,7 @@ nav {
       top: 0;
       width: 100%;
       height: 100%;
-      border: 1px solid var(--stroke-accent);
+      border: 1px solid var(--stroke-medium);
       z-index: 1;
     }
 
@@ -476,5 +476,19 @@ nav {
         display: none;
       }
     }
+
+    &-error {
+      &::before {
+        border: 1px solid var(--red-5);
+      }
+    }
   }
+}
+
+.fixed {
+  position: fixed !important;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - var(--global-padding) * 2);
+  max-width: calc(var(--max-width));
 }

@@ -154,7 +154,7 @@ export const CropperBox = ({
             crop={crop}
             onChange={(_, percentCrop) => setCrop(percentCrop)}
             onComplete={(c) => setCompletedCrop(c)}
-            aspect={1}
+            // aspect={1}
             circularCrop
             // minWidth={400}
             minHeight={100}

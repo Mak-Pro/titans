@@ -1,4 +1,4 @@
-.friends {
+.invite {
   display: flex;
   flex-direction: column;
   padding-bottom: 60px;
@@ -24,30 +24,36 @@
   &__list {
     display: flex;
     flex-direction: column;
+  }
 
-    &_grid {
-      display: flex;
-      margin: 0 -4px;
-      gap: 8px 0;
-      overflow-x: auto;
+  &__friends_grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px 0;
+  }
 
-      &_column {
-        min-width: 146px;
-        padding: 0 4px;
+  &__referrals_grid {
+    display: flex;
+    margin: 0 -4px;
+    gap: 8px 0;
+    overflow-x: auto;
 
-        &:nth-child(1) {
-          clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
-        }
+    &_column {
+      min-width: 146px;
+      padding: 0 4px;
 
-        &:nth-child(3) {
-          clip-path: polygon(
-            0 0,
-            calc(100% - 12px) 0,
-            100% 12px,
-            100% 100%,
-            0 100%
-          );
-        }
+      &:nth-child(1) {
+        clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
+      }
+
+      &:nth-child(3) {
+        clip-path: polygon(
+          0 0,
+          calc(100% - 12px) 0,
+          100% 12px,
+          100% 100%,
+          0 100%
+        );
       }
     }
   }

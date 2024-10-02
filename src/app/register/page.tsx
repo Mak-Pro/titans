@@ -1,4 +1,4 @@
-import { Spacer, Profile } from "@/components";
+import { Spacer, Register } from "@/components";
 export default async function RegisterPage() {
   return (
     <>
@@ -9,7 +9,7 @@ export default async function RegisterPage() {
       <Spacer space={8} />
       <p style={{ textAlign: "center" }}>Enter your nickname and enjoy</p>
       <Spacer space={20} />
-      <Profile />
+      <Register />
     </>
   );
 }

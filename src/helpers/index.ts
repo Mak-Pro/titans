@@ -1,5 +1,5 @@
 export function numberFormatter(val: number) {
-  return new Intl.NumberFormat("fr-FR", {}).format(val);
+  return new Intl.NumberFormat("ru-RU", {}).format(val).replace(",", ".");
 }
 
 export const readFile = (file: File) => {

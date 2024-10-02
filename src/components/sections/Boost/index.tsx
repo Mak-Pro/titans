@@ -1,193 +1,262 @@
 "use client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useTelegram } from "@/providers/telegram";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Spacer } from "@/components";
+import { Spacer, Button, UserBar } from "@/components";
 import styles from "./style.module.scss";
-
-const boosters = [
-  {
-    id: 1,
-    mediaUrl: "/images/image-stub-2.jpg",
-    power: 1000,
-    agility: 1000,
-    stamina: 1000,
-  },
-  {
-    id: 2,
-    mediaUrl: "/images/image-stub-2.jpg",
-    power: 1500,
-    agility: 900,
-    stamina: 700,
-  },
-  {
-    id: 3,
-    mediaUrl: "/images/image-stub-2.jpg",
-    power: 2000,
-    agility: 1500,
-    stamina: 750,
-  },
-];
+import { titansUser, titanUpdate } from "@/api";
+import { TitanProps, TitanAttributes } from "@/Types";
+import clsx from "clsx";
 
 export const Boost = () => {
+  const { user } = useTelegram();
+  const [titans, setTitans] = useState<TitanProps[] | undefined>(undefined);
+  const [points, setPoints] = useState(null);
+
+  const getBoostData = () => {
+    if (user) {
+      titansUser(user.id).then((data) => {
+        const { userPoints, currentTitan, titans } = data;
+        setPoints(userPoints);
+        const allTitans: TitanProps[] | undefined = [
+          { ...currentTitan },
+          ...titans,
+        ];
+        setTitans(allTitans);
+      });
+    }
+  };
+
+  useEffect(() => {
+    getBoostData();
+  }, [user]);
+
+  const update = (attribute: TitanAttributes, titanId: number) => {
+    titanUpdate(titanId, { attribute }).then((data) => {
+      console.log(data);
+      getBoostData();
+    });
+  };
+
   return (
-    <div className={styles.boost}>
-      <Swiper
-        className={`${styles.boost__slider}`}
-        modules={[Navigation]}
-        slidesPerView={1}
-        spaceBetween={16}
-        navigation={{}}
-        loop={true}
-      >
-        {boosters.map((boost) => (
-          <SwiperSlide key={boost.id}>
-            <div className={styles.boost__item}>
-              <Spacer space={4} />
-              <div className={styles.boost__media}>
-                <Image src="/images/image-stub-2.jpg" fill alt="image" />
-              </div>
-              <div className={styles.boost__content}>
-                <div className={`title-list`}>
-                  <div className="title-list-header">
-                    <h6>Character Boost</h6>
+    <>
+      <UserBar points={points} />
+      <div className={styles.boost}>
+        {titans && titans?.length > 0 && points && (
+          <Swiper
+            className={`${styles.boost__slider}`}
+            modules={[Navigation]}
+            slidesPerView={1}
+            spaceBetween={16}
+            navigation={{}}
+            loop={true}
+          >
+            {titans.map((titan) => (
+              <SwiperSlide key={titan.name}>
+                <div
+                  className={clsx(
+                    styles.boost__item,
+                    !titan.available && styles.boost__item_inactive
+                  )}
+                >
+                  <Spacer space={4} />
+                  <div
+                    className={clsx(
+                      styles.boost__media,
+                      !titan.available && styles.boost__media_inactive
+                    )}
+                  >
+                    <Image src="/images/image-stub-2.jpg" fill alt="image" />
+                    {!titan.available && (
+                      <Image
+                        src="/icons/lock-icon.svg"
+                        width={82}
+                        height={82}
+                        alt="locked"
+                        className={styles.boost__media_lock}
+                      />
+                    )}
                   </div>
-                  <div className="title-list-body">
-                    <div className={styles.boost__items}>
-                      <div className={styles.boost__item}>
-                        <div className={styles.boost__item_stats}>
-                          <div>
-                            <Image
-                              src={boost.mediaUrl}
-                              width={32}
-                              height={32}
-                              alt="power"
-                            />
-                          </div>
-                          <div>Power</div>
-                          <div>
-                            <Image
-                              src="/icons/price-icon.svg"
-                              width={36}
-                              height={24}
-                              alt="price"
-                            />{" "}
-                            {boost.power}
-                          </div>
-                        </div>
-                        <div className={styles.boost__item_actions}>
-                          <button type="button" onClick={() => {}}>
-                            <Image
-                              src="/icons/minus-icon.svg"
-                              width={32}
-                              height={32}
-                              alt="minus"
-                            />
-                          </button>
-                          <div>{2}</div>
-                          <button type="button" onClick={() => {}}>
-                            <Image
-                              src="/icons/plus-icon.svg"
-                              width={32}
-                              height={32}
-                              alt="plus"
-                            />
-                          </button>
-                        </div>
+                  <div
+                    className={clsx(
+                      styles.boost__content,
+                      !titan.available && styles.boost__content_inactive
+                    )}
+                  >
+                    <div className={`title-list`}>
+                      <div className="title-list-header">
+                        <h6>Character Boost</h6>
                       </div>
-                      <div className={styles.boost__item}>
-                        <div className={styles.boost__item_stats}>
-                          <div>
-                            <Image
-                              src="/icons/robot-agility-icon.svg"
-                              width={32}
-                              height={32}
-                              alt="agility"
-                            />
+                      <div className="title-list-body">
+                        <div className={styles.boost__items}>
+                          <div className={styles.boost__item}>
+                            <div className={styles.boost__item_stats}>
+                              <div>
+                                <Image
+                                  src="/icons/robot-power-icon.svg"
+                                  width={32}
+                                  height={32}
+                                  alt="power"
+                                />
+                                Power
+                              </div>
+                              <div>
+                                <Button
+                                  variant="outlined"
+                                  size="small"
+                                  textColor="var(--button-bg-primary)"
+                                  radius={0}
+                                  onClick={() =>
+                                    update("POWER", titan.id as number)
+                                  }
+                                  disabled={
+                                    titan.powerPrice >= points ||
+                                    titan.power === titan.maxPower
+                                  }
+                                >
+                                  <Image
+                                    src="/icons/coin-icon-alt.svg"
+                                    width={16}
+                                    height={16}
+                                    alt="price"
+                                  />
+                                  {titan.powerPrice}
+                                </Button>
+                              </div>
+                              <div className={styles.boost__item_progress}>
+                                <span
+                                  className={styles.boost__item_progress_text}
+                                >
+                                  {titan.power}/{titan.maxPower} lvl
+                                </span>
+                                <span
+                                  className={styles.boost__item_progress_bar}
+                                  style={{
+                                    width: `${
+                                      (titan.power / titan.maxPower) * 100
+                                    }%`,
+                                  }}
+                                ></span>
+                              </div>
+                            </div>
                           </div>
-                          <div>Agility</div>
-                          <div>
-                            <Image
-                              src="/icons/price-icon.svg"
-                              width={36}
-                              height={24}
-                              alt="price"
-                            />{" "}
-                            {boost.agility}
+                          <div className={styles.boost__item}>
+                            <div className={styles.boost__item_stats}>
+                              <div>
+                                <Image
+                                  src="/icons/robot-agility-icon.svg"
+                                  width={32}
+                                  height={32}
+                                  alt="power"
+                                />
+                                Agility
+                              </div>
+                              <div>
+                                <Button
+                                  variant="outlined"
+                                  size="small"
+                                  textColor="var(--button-bg-primary)"
+                                  radius={0}
+                                  onClick={() =>
+                                    update("AGILITY", titan.id as number)
+                                  }
+                                  disabled={
+                                    titan.agilityPrice >= points ||
+                                    titan.agility === titan.maxAgility
+                                  }
+                                >
+                                  <Image
+                                    src="/icons/coin-icon-alt.svg"
+                                    width={16}
+                                    height={16}
+                                    alt="price"
+                                  />
+                                  {titan.agilityPrice}
+                                </Button>
+                              </div>
+                              <div className={styles.boost__item_progress}>
+                                <span
+                                  className={styles.boost__item_progress_text}
+                                >
+                                  {titan.agility}/{titan.maxAgility} lvl
+                                </span>
+                                <span
+                                  className={styles.boost__item_progress_bar}
+                                  style={{
+                                    width: `${
+                                      (titan.agility / titan.maxAgility) * 100
+                                    }%`,
+                                  }}
+                                ></span>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <div className={styles.boost__item_actions}>
-                          <button type="button" onClick={() => {}}>
-                            <Image
-                              src="/icons/minus-icon.svg"
-                              width={32}
-                              height={32}
-                              alt="minus"
-                            />
-                          </button>
-                          <div>{2}</div>
-                          <button type="button" onClick={() => {}}>
-                            <Image
-                              src="/icons/plus-icon.svg"
-                              width={32}
-                              height={32}
-                              alt="plus"
-                            />
-                          </button>
-                        </div>
-                      </div>
-                      <div className={styles.boost__item}>
-                        <div className={styles.boost__item_stats}>
-                          <div>
-                            <Image
-                              src="/icons/robot-stamina-icon.svg"
-                              width={32}
-                              height={32}
-                              alt="stamina"
-                            />
+                          <div className={styles.boost__item}>
+                            <div className={styles.boost__item_stats}>
+                              <div>
+                                <Image
+                                  src="/icons/robot-stamina-icon.svg"
+                                  width={32}
+                                  height={32}
+                                  alt="power"
+                                />
+                                Stamina
+                              </div>
+                              <div>
+                                <Button
+                                  variant="outlined"
+                                  size="small"
+                                  textColor="var(--button-bg-primary)"
+                                  radius={0}
+                                  onClick={() =>
+                                    update("STAMINA", titan.id as number)
+                                  }
+                                  disabled={
+                                    titan.staminaPrice >= points ||
+                                    titan.stamina === titan.maxStamina
+                                  }
+                                >
+                                  <Image
+                                    src="/icons/coin-icon-alt.svg"
+                                    width={16}
+                                    height={16}
+                                    alt="price"
+                                  />
+                                  {titan.staminaPrice}
+                                </Button>
+                              </div>
+                              <div className={styles.boost__item_progress}>
+                                <span
+                                  className={styles.boost__item_progress_text}
+                                >
+                                  {titan.stamina}/{titan.maxStamina} lvl
+                                </span>
+                                <span
+                                  className={styles.boost__item_progress_bar}
+                                  style={{
+                                    width: `${
+                                      (titan.stamina / titan.maxStamina) * 100
+                                    }%`,
+                                  }}
+                                ></span>
+                              </div>
+                            </div>
                           </div>
-                          <div>Stamina</div>
-                          <div>
-                            <Image
-                              src="/icons/price-icon.svg"
-                              width={36}
-                              height={24}
-                              alt="price"
-                            />{" "}
-                            {boost.stamina}
-                          </div>
-                        </div>
-                        <div className={styles.boost__item_actions}>
-                          <button type="button" onClick={() => {}}>
-                            <Image
-                              src="/icons/minus-icon.svg"
-                              width={32}
-                              height={32}
-                              alt="minus"
-                            />
-                          </button>
-                          <div>{2}</div>
-                          <button type="button" onClick={() => {}}>
-                            <Image
-                              src="/icons/plus-icon.svg"
-                              width={32}
-                              height={32}
-                              alt="plus"
-                            />
-                          </button>
                         </div>
                       </div>
                     </div>
+                    <Spacer space={10} />
                   </div>
                 </div>
-                <Spacer space={10} />
-              </div>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
+      </div>
+    </>
   );
 };

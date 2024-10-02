@@ -91,6 +91,12 @@
     pointer-events: none;
     background-color: var(--button-bg-disabled) !important;
     color: var(--button-text-disabled) !important;
+
+    svg,
+    img {
+      opacity: 0.2;
+      filter: grayscale(1);
+    }
   }
 
   &__loading {

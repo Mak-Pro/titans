@@ -15,7 +15,7 @@ export const Rating = () => {
       <Spacer space={24} />
 
       <Tabs className={styles.rating__tabs}>
-        <Tab label="Good Team">
+        <Tab label="Conqueror's">
           <Spacer space={20} />
 
           <div className={styles.rating__top}>
@@ -193,7 +193,7 @@ export const Rating = () => {
             </div>
           </div>
         </Tab>
-        <Tab label="Evil Team">
+        <Tab label="Protector's">
           <Spacer space={20} />
 
           <div className={styles.rating__top}>

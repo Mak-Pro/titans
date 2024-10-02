@@ -1,5 +1,5 @@
-// import { Account } from "@/components";
+import { Select } from "@/components";
 
 export default async function SelectPage() {
-  return <></>;
+  return <Select />;
 }

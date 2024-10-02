@@ -1,15 +1,14 @@
 "use client";
 import React, { createContext, useState, useEffect } from "react";
 import { useTelegram } from "./telegram";
-import { checkUser } from "@/api";
+import { loginUser, checkUser, referralsUser } from "@/api";
+import { RewardsProps } from "@/Types";
 
 const AppContext = createContext({
   loading: true,
-  isLogined: false,
-  isAdmin: false,
+  isRegistered: false,
   setLoading: (val: boolean): void => {},
-  setIsLogined: (val: boolean): void => {},
-  setIsAdmin: (val: boolean): void => {},
+  setIsRegistered: (val: boolean): void => {},
   webApp: undefined as WebApp | undefined,
   user: {
     id: 0,
@@ -17,6 +16,8 @@ const AppContext = createContext({
     last_name: "",
     username: "",
   } as WebAppUser | undefined,
+  rewardsData: null as RewardsProps | null,
+  setRewardsData: (val: RewardsProps): void => {},
 });
 
 export const AppContextProvider = ({
@@ -45,39 +46,65 @@ export const AppContextProvider = ({
     });
   }
 
-  useEffect(() => {
-    if (user) {
-      checkUser(user.id)
-        .then((data) => {
-          if (typeof data === "object") {
-            const {
-              data: { token_type, access_token },
-            } = data;
-            sessionStorage.setItem("token", `${token_type} ${access_token}`);
-            setIsLogined(true);
-          }
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  }, [user]);
-
   const [loading, setLoading] = useState(true);
-  const [isLogined, setIsLogined] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [rewardsData, setRewardsData] = useState<RewardsProps | null>(null);
+
+  useEffect(() => {
+    if (webApp && user) {
+      if (sessionStorage.getItem("token") === null) {
+        loginUser(webApp.initData).then(() => {
+          checkUser(user.id)
+            .then((data: any) => {
+              if (typeof data === "object" && "userExists" in data.data) {
+                const { userExists } = data.data;
+                setIsRegistered(userExists as boolean);
+              }
+            })
+            .finally(() => {
+              setLoading(false);
+            });
+
+          // set referrals
+          if (webApp.initDataUnsafe.start_param) {
+            const startParam = webApp.initDataUnsafe.start_param;
+            const data = {
+              referral: startParam,
+              telegramId: user.id,
+            };
+            referralsUser(data).then((response) => {
+              console.log(response);
+            });
+          }
+        });
+      } else {
+        checkUser(user.id)
+          .then((data: any) => {
+            if (typeof data === "object" && "userExists" in data.data) {
+              const { userExists } = data.data;
+              setIsRegistered(userExists as boolean);
+            }
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }
+    }
+  }, [webApp, user, isRegistered]);
+
+  useEffect(() => {}, [loading, rewardsData]);
 
   return (
     <AppContext.Provider
       value={{
         loading,
         setLoading,
-        isLogined,
-        setIsLogined,
-        isAdmin,
-        setIsAdmin,
+        isRegistered,
+        setIsRegistered,
         webApp,
         user,
+        rewardsData,
+        setRewardsData,
       }}
     >
       {children}

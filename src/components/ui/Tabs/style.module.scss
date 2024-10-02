@@ -25,6 +25,7 @@
     &_active {
       color: var(--button-bg-primary);
       background-color: var(--tab-bg-active);
+      pointer-events: none;
     }
 
     &:first-child {

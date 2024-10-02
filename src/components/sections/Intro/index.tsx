@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Card, TopControlArea } from "@/components";
+import { Card, Button } from "@/components";
 import styles from "./style.module.scss";
 import { CardProps } from "@/Types";
 import clsx from "clsx";
@@ -100,7 +100,6 @@ export const Intro = () => {
 
   return (
     <>
-      <TopControlArea back backHandler={() => router.replace("/")} />
       <div className={styles.intro}>
         <div className={styles.intro__media}>
           <div id="intro-grid" className={styles.intro__media_grid}></div>
@@ -162,17 +161,19 @@ export const Intro = () => {
           </div>
         </div>
       </div>
-      {/* <div className={styles.intro__actions}>
+      <div className={styles.intro__actions}>
         <Button
           size="medium"
           variant="filled"
           textColor="var(--button-text-primary)"
           bgColor="var(--button-bg-primary)"
           radius={0}
+          href="/"
+          target="_self"
         >
-          Skip
+          Home
         </Button>
-      </div> */}
+      </div>
     </>
   );
 };

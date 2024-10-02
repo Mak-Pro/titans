@@ -6,10 +6,12 @@ import styles from "./style.module.scss";
 import CopyToClipboard from "react-copy-to-clipboard";
 import toast from "react-hot-toast";
 import { useTelegram } from "@/providers/telegram";
-import { userAxios } from "@/api";
+import { referralUser, friendsUser } from "@/api";
 import AppContext from "@/providers/context";
 import TelegramIcon from "@public/icons/telegram-icon-alt.svg";
 import LinkIcon from "@public/icons/link-icon.svg";
+import { FriendProps } from "@/Types";
+import { numberFormatter } from "@/helpers";
 
 export const Friends = () => {
   const router = useRouter();
@@ -18,52 +20,51 @@ export const Friends = () => {
   const [modal, setModal] = useState(false);
   const [points, setPoints] = useState(0);
   const [invites, setInvites] = useState(0);
-  const [friends, setFriends] = useState<any[]>([]);
-  const [referralLink, setReferralLink] = useState("referral link");
+  const [friends, setFriends] = useState<FriendProps[]>([]);
+  const [referrals, setReferrals] = useState<any[]>([]);
+  const [referralLink, setReferralLink] = useState("");
 
   useEffect(() => {
     if (user) {
-      const token = sessionStorage.getItem("token");
-      userAxios
-        .get(`/users/${user?.id}/friends`)
-        .then((res) => {
-          const {
-            data: { referralPoints, invitesCounter, friends },
-          } = res;
-          setFriends(friends);
-          setPoints(referralPoints);
-          setInvites(invitesCounter);
+      referralUser(user.id).then((data) => {
+        const { referralCode } = data;
+        setReferralLink(referralCode);
+      });
 
-          userAxios.get(`/users/${user?.id}/referral`).then((res) => {
-            const {
-              data: { referralCode },
-            } = res;
-            setReferralLink(referralCode);
-          });
-        })
-        .catch((error) => {
-          router.replace("/");
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      friendsUser(user.id).then((data) => {
+        const { referralPoints, friends } = data;
+        setFriends(friends);
+        setPoints(referralPoints);
+      });
     }
   }, [user]);
 
-  // if (loading) return null;
+  if (loading) return null;
 
   return (
     <>
-      <div className={styles.friends}>
+      <div className={styles.invite}>
         <Spacer space={20} />
-        <h2 className={styles.friends__title}>Invite Friend</h2>
+        <h2 className={styles.invite__title}>Invite Friend</h2>
         <Spacer space={4} />
         <p>Invite friends to earn more Points</p>
         <Spacer space={24} />
 
-        <div className={styles.friends__bonuses}>
-          <Board reward title="Special bonuses #1" text="+1 000 " />
-          <Board reward title="Special bonuses #2" text="+1 000 " />
+        <div className={styles.invite__bonuses}>
+          <Board
+            type="invite"
+            icon={"/icons/invite-icon.svg"}
+            title="Invite a Friend"
+            text="Earn coins together"
+            bonus={3}
+          />
+          <Board
+            type="invite"
+            icon={"/icons/star-icon.svg"}
+            title="Invite Premium"
+            text="Earn coins together"
+            bonus={3}
+          />
         </div>
 
         <Spacer space={12} />
@@ -81,59 +82,92 @@ export const Friends = () => {
 
         <Spacer space={28} />
 
-        <div className={`${styles.friends__list} title-list`}>
+        <div className={`${styles.invite__list} title-list`}>
           <div className="title-list-header">
-            <h6>My friends: 0</h6>
+            <h6>Top Referrals:</h6>
           </div>
           <div className="title-list-body">
-            <Slot text="You haven’t invited any friends yet" />
-
-            <div className={styles.friends__list_grid}>
-              <div className={styles.friends__list_grid_column}>
-                <Referral
-                  avatar="/images/profile-stub.jpg"
-                  percent={10}
-                  name="NemotoMakoto"
-                  users={14}
-                  earn={75000}
-                />
+            {friends.length === 0 && (
+              <Slot text="You haven’t any referrals yet" />
+            )}
+            {friends.length > 0 && (
+              <div className={styles.invite__referrals_grid}>
+                <div className={styles.invite__referrals_grid_column}>
+                  <Referral
+                    avatar="/images/profile-stub.jpg"
+                    percent={10}
+                    name="NemotoMakoto"
+                    users={14}
+                    earn={75000}
+                  />
+                </div>
+                <div className={styles.invite__referrals_grid_column}>
+                  <Referral
+                    avatar="/images/profile-stub.jpg"
+                    percent={10}
+                    name="NemotoMakoto"
+                    users={14}
+                    earn={75000}
+                  />
+                </div>
+                <div className={styles.invite__referrals_grid_column}>
+                  <Referral
+                    avatar="/images/profile-stub.jpg"
+                    percent={10}
+                    name="NemotoMakoto"
+                    users={14}
+                    earn={75000}
+                  />
+                </div>
               </div>
-              <div className={styles.friends__list_grid_column}>
-                <Referral
-                  avatar="/images/profile-stub.jpg"
-                  percent={10}
-                  name="NemotoMakoto"
-                  users={14}
-                  earn={75000}
-                />
-              </div>
-              <div className={styles.friends__list_grid_column}>
-                <Referral
-                  avatar="/images/profile-stub.jpg"
-                  percent={10}
-                  name="NemotoMakoto"
-                  users={14}
-                  earn={75000}
-                />
-              </div>
-            </div>
+            )}
           </div>
-          {/* {friends.length > 0 &&
-            friends.map((friend) => {
-              const { telegramId, avatarLink, username, jupbotPoints, level } =
-                friend;
-              return (
-                <Board
-                  key={telegramId}
-                  avatar={avatarLink}
-                  title={username}
-                  value={`${jupbotPoints} JPP`}
-                />
-              );
-            })} */}
+        </div>
+
+        <Spacer space={28} />
+
+        <div className={`${styles.invite__list} title-list`}>
+          <div className="title-list-header">
+            <h6>My friends: {friends.length}</h6>
+          </div>
+          <div className="title-list-body">
+            {friends.length === 0 && (
+              <Slot text="You haven’t invited any friends yet" />
+            )}
+
+            {friends.length > 0 && (
+              <div className={styles.invite__friends_grid}>
+                {friends.map((friend) => (
+                  <div
+                    key={friend.username}
+                    className={styles.invite__friends_grid_column}
+                  >
+                    <Board
+                      type="person"
+                      avatar={
+                        !friend.avatarLink.includes("null") ||
+                        !friend.avatarLink === null
+                          ? friend.avatarLink
+                          : null
+                      }
+                      icon={
+                        friend.avatarLink.includes("null") ||
+                        friend.avatarLink === null
+                          ? "/icons/spinner-color.svg"
+                          : null
+                      }
+                      title={friend.username}
+                      reward
+                      text={numberFormatter(friend.points)}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
-      <div className={styles.friends__actions}>
+      <div className={styles.invite__actions}>
         <Button
           size="large"
           variant="filled"
@@ -141,6 +175,8 @@ export const Friends = () => {
           textColor={"var(--button-text-primary)"}
           onClick={() => {}}
           radius={0}
+          href={`https://t.me/share/url?url=${referralLink}&text=Play Titans Game!`}
+          target="_blank"
         >
           <TelegramIcon />
           Invite a Friends

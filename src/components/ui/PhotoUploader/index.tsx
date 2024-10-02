@@ -15,7 +15,11 @@ export const PhotoUploader = forwardRef(
         <input type="file" onChange={callBack} accept="image/*" ref={ref} />
         <div className={styles.uploader__picture}>
           {url ? (
-            <Image src={url} fill alt="avatar" />
+            <img
+              src={url}
+              alt="avatar"
+              className={styles.uploader__picture_avatar}
+            />
           ) : (
             <Image
               src={"/icons/camera-icon.svg"}

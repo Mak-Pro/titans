@@ -9,37 +9,39 @@ import "swiper/css";
 import "swiper/css/pagination";
 import styles from "./style.module.scss";
 import parser from "html-react-parser";
+import clsx from "clsx";
 
 const slides = [
   {
     id: 1,
-    image: {
-      url: "/images/image-stub.jpg",
-      width: 358,
-      height: 295,
-    },
-    title: "Play Mini Game",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    image: "/images/image-stub.jpg",
+    title: "Welcome to Game",
+    text: "Dive into the world of Titans and join the battle for supremacy. Collect, upgrade, and compete to become the ultimate champion!",
+    list: [
+      "Earn points and power up your Titans by tapping. The faster you tap, the stronger your Titans become!",
+      "Let your Titans farm points while you’re away. Return to claim your rewards and continue your journey.",
+    ],
   },
   {
     id: 2,
-    image: {
-      url: "/images/image-stub.jpg",
-      width: 358,
-      height: 295,
-    },
-    title: "Refferals",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    image: "/images/image-stub.jpg",
+    title: "Invite Friends & Earn More!",
+    text: "Invite your friends to join the game and earn exclusive rewards. The more friends you refer, the stronger your Titans will grow!",
+    list: [
+      "Send invites to your friends.",
+      "Earn rewards when your friends join and start playing.",
+      "Unlock special characters and bonuses as your network grows.",
+    ],
   },
   {
     id: 3,
-    image: {
-      url: "/images/image-stub.jpg",
-      width: 358,
-      height: 295,
-    },
-    title: "Leaderboard",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    image: "/images/image-stub.jpg",
+    title: "Climb the Leaderboard",
+    list: [
+      "See how you stack up against players from around the world. Compete in weekly contests and dominate the leaderboard!",
+      "Join forces with others to compete as a team. Whether you choose to fight for good or embrace the dark side, your actions will influence the fate of your team.",
+      "Top players earn exclusive rewards and bragging rights!",
+    ],
   },
 ];
 
@@ -76,7 +78,7 @@ export const Onboarding = ({ callBack }: { callBack?: () => void }) => {
               <div className={styles.onboarding__slider_slide}>
                 <div className={styles.onboarding__slider_slide_image}>
                   <Image
-                    src={slide.image.url}
+                    src={slide.image}
                     fill
                     alt={slide.title}
                     quality={100}
@@ -86,7 +88,14 @@ export const Onboarding = ({ callBack }: { callBack?: () => void }) => {
                   <h2 className={styles.onboarding__slider_slide_content_title}>
                     {slide.title}
                   </h2>
-                  <p>{parser(slide.text)}</p>
+                  {slide.text && <p>{parser(slide.text)}</p>}
+                  {slide.list && (
+                    <ul>
+                      {slide.list.map((item, i) => (
+                        <li key={i}>{item}</li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
             </SwiperSlide>
@@ -95,12 +104,12 @@ export const Onboarding = ({ callBack }: { callBack?: () => void }) => {
       </div>
 
       <div
-        className={`${styles.onboarding__slider_pagination} swiper-pagination-alt`}
+        className={`${styles.onboarding__slider_pagination} swiper-pagination-alt fixed`}
       >
         <div id={`pagination-${id}`}></div>
       </div>
 
-      <div className={styles.onboarding__actions}>
+      <div className={clsx(styles.onboarding__actions, "fixed")}>
         <Button
           variant="filled"
           bgColor={"var(--button-bg-primary)"}
@@ -111,11 +120,13 @@ export const Onboarding = ({ callBack }: { callBack?: () => void }) => {
               swiperRef.current &&
               !last &&
               swiperRef.current.slideNext();
-
-            last && callBack ? callBack() : () => {};
+            if (last) {
+              sessionStorage.setItem("first", "true");
+              router.replace("/register");
+            }
           }}
         >
-          {last ? "Login" : "Next"}
+          {last ? "Register" : "Next"}
         </Button>
       </div>
     </div>

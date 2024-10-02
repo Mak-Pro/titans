@@ -6,7 +6,6 @@
   &__stats {
     display: flex;
     gap: 0 4px;
-    padding: 8px 0;
 
     div {
       position: relative;
@@ -145,21 +144,7 @@
     &_tap {
     }
 
-    &_point {
-      font-family: var(--font-chakra-petch);
-      font-size: 60px;
-      font-weight: 900;
-      //   -webkit-text-stroke: 3px $black;
-      //   -webkit-text-fill-color: $white;
-      width: 40px;
-      height: 40px;
-      margin-left: -20px;
-      margin-top: -20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      color: var(--text-primary);
+    &_inactive {
       pointer-events: none;
     }
   }
@@ -175,6 +160,7 @@
   left: 0;
   top: 50%;
   transform: translateY(-50%);
+  margin-top: 9px;
 
   &__bar {
     flex: 1;
@@ -223,5 +209,32 @@
     font-weight: 600;
     color: var(--text-primary);
     text-align: center;
+  }
+}
+
+.tap__area {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #144b4f;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+
+  &_point {
+    font-family: var(--font-chakra-petch);
+    font-size: 40px;
+    font-weight: 900;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    color: var(--text-primary);
+    pointer-events: none;
   }
 }

@@ -15,6 +15,7 @@ export const Button = ({
   textColor,
   href,
   onClick,
+  linkClick,
   target,
   className,
   disabled,
@@ -94,7 +95,11 @@ export const Button = ({
       }}
     >
       {href && (
-        <Link href={href} target={target ? target : "_blank"}>
+        <Link
+          href={href}
+          target={target ? target : "_blank"}
+          onClick={linkClick}
+        >
           link
         </Link>
       )}
