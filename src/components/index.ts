@@ -21,6 +21,7 @@ export { Card } from "./ui/Card";
 export { NumberBadge } from "./ui/NumberBadge";
 export { Preloader } from "./ui/Preloader";
 export { UserBar } from "./ui/UserBar";
+export { MediaPreview } from "./ui/MediaPreview";
 
 // sections
 export { Clicker } from "./sections/Clicker";

@@ -45,7 +45,7 @@
       width: 100%;
       height: 100%;
       border: 1px solid var(--stroke-accent);
-      z-index: 1;
+      z-index: 2;
     }
 
     &::after {
@@ -80,6 +80,39 @@
         0 26px,
         1px 26px
       );
+    }
+
+    &_texture {
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    &_gradient {
+      display: block;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 40%;
+      background: linear-gradient(
+        0deg,
+        rgba(10, 38, 39, 1) 0%,
+        rgba(238, 130, 238, 0) 100%
+      );
+      z-index: 1;
+    }
+
+    &_line {
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+      background-image: url("/images/line-overlay.png");
+      background-position: center;
+      background-repeat: repeat-y;
     }
 
     &_lock {

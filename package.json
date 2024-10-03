@@ -30,6 +30,7 @@
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
     "react-image-crop": "^11.0.7",
+    "react-player": "^2.16.0",
     "react-slot-counter": "^3.0.1",
     "sass": "^1.77.0",
     "sharp": "^0.33.5",

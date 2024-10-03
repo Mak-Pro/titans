@@ -107,6 +107,20 @@ export const infoUser = async (telegramId: number) => {
   }
 };
 
+export const updateUser = async (
+  telegramId: number,
+  data: { username: string | undefined; avatar: string }
+) => {
+  try {
+    const response = await userAxios.put(`/users/${telegramId}`, data);
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return handleAxiosError(error, apiErrors.info);
+    }
+  }
+};
+
 export const checkUserName = async (username: string) => {
   try {
     const response = await userAxios.get(`/users/verify/username/${username}`);
@@ -177,6 +191,23 @@ export const questCompleteUser = async (
   try {
     const response = await userAxios.post(
       `/users/${telegramId}/quests/complete`,
+      data
+    );
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return handleAxiosError(error, apiErrors.register);
+    }
+  }
+};
+
+export const sendInviteUser = async (
+  telegramId: number,
+  data: { result: string }
+) => {
+  try {
+    const response = await userAxios.post(
+      `/users/${telegramId}/quests/sendInvite`,
       data
     );
     return response;

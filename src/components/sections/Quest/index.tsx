@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useTelegram } from "@/providers/telegram";
-import { questsUser } from "@/api";
+import { questsUser, questCompleteUser } from "@/api";
 import { Board, Tabs, Tab, Spacer, CountdownSimple } from "@/components";
 import styles from "./style.module.scss";
 import { QuestsProps } from "@/Types";
@@ -9,16 +9,21 @@ import { QuestsProps } from "@/Types";
 export const Quest = () => {
   const { user } = useTelegram();
   const [quests, setQuests] = useState<QuestsProps | undefined>(undefined);
+  const [refresh, setRefresh] = useState(false);
 
   const handleQuests = () => {
     if (user) {
-      questsUser(user.id).then((data: QuestsProps) => setQuests(data));
+      questsUser(user.id).then((data: QuestsProps) => {
+        setQuests(data);
+      });
     }
   };
 
   useEffect(() => {
     handleQuests();
-  }, [user, quests]);
+  }, [user, refresh]);
+
+  useEffect(() => {}, [quests]);
 
   return (
     <div className={styles.quest}>
@@ -101,7 +106,19 @@ export const Quest = () => {
                   }
                   done={quest.done}
                   questId={quest.id}
-                  callBack={quest.button ? handleQuests : undefined}
+                  callBack={
+                    quest.button
+                      ? () => {
+                          if (user) {
+                            questCompleteUser(user.id, {
+                              questId: quest.id,
+                            }).then(() => {
+                              setRefresh((prev) => !prev);
+                            });
+                          }
+                        }
+                      : undefined
+                  }
                 />
               ))}
             </div>
@@ -126,7 +143,19 @@ export const Quest = () => {
                   }
                   done={quest.done}
                   questId={quest.id}
-                  callBack={quest.button ? handleQuests : undefined}
+                  callBack={
+                    quest.button
+                      ? () => {
+                          if (user) {
+                            questCompleteUser(user.id, {
+                              questId: quest.id,
+                            }).then(() => {
+                              setRefresh((prev) => !prev);
+                            });
+                          }
+                        }
+                      : undefined
+                  }
                 />
               ))}
             </div>

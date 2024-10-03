@@ -62,7 +62,7 @@ export const AppContextProvider = ({
               }
             })
             .finally(() => {
-              setLoading(false);
+              // setLoading(false);
             });
 
           // set referrals
@@ -86,7 +86,7 @@ export const AppContextProvider = ({
             }
           })
           .finally(() => {
-            setLoading(false);
+            // setLoading(false);
           });
       }
     }

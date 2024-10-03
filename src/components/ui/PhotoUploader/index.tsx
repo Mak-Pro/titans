@@ -26,6 +26,7 @@ export const PhotoUploader = forwardRef(
               width={40}
               height={40}
               alt="avatar"
+              className={styles.uploader__picture_icon}
             />
           )}
         </div>

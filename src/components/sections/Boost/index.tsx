@@ -12,6 +12,13 @@ import { titansUser, titanUpdate } from "@/api";
 import { TitanProps, TitanAttributes } from "@/Types";
 import clsx from "clsx";
 
+const images = [
+  "/images/conqueror-bitaxel.png",
+  "/images/conqueror-lytrix.png",
+  "/images/protector-exyron.png",
+  "/images/protector-rylanx.png",
+];
+
 export const Boost = () => {
   const { user } = useTelegram();
   const [titans, setTitans] = useState<TitanProps[] | undefined>(undefined);
@@ -55,7 +62,7 @@ export const Boost = () => {
             navigation={{}}
             loop={true}
           >
-            {titans.map((titan) => (
+            {titans.map((titan, i) => (
               <SwiperSlide key={titan.name}>
                 <div
                   className={clsx(
@@ -70,7 +77,15 @@ export const Boost = () => {
                       !titan.available && styles.boost__media_inactive
                     )}
                   >
-                    <Image src="/images/image-stub-2.jpg" fill alt="image" />
+                    <Image
+                      src="/images/boost-img-overlay.png"
+                      fill
+                      alt="texture"
+                      className={styles.boost__media_texture}
+                    />
+                    <span className={styles.boost__media_gradient}></span>
+                    <span className={styles.boost__media_line}></span>
+                    <Image src={images[i]} fill alt="image" />
                     {!titan.available && (
                       <Image
                         src="/icons/lock-icon.svg"

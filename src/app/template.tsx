@@ -2,9 +2,11 @@
 import { usePathname } from "next/navigation";
 import { useContext, useEffect } from "react";
 import AppContext from "@/providers/context";
-import { Navigation, Preloader } from "@/components";
+import { Navigation, Preloader, MediaPreview } from "@/components";
 import { Toaster } from "react-hot-toast";
 import { useTelegram } from "@/providers/telegram";
+import dynamic from "next/dynamic";
+const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
 const headerPages = [
   "/",
@@ -21,7 +23,7 @@ const headerPages = [
 export default function Template({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { webApp } = useTelegram();
-  const { loading, isRegistered } = useContext(AppContext);
+  const { loading, isRegistered, setLoading } = useContext(AppContext);
 
   useEffect(() => {
     if (webApp) {
@@ -44,7 +46,22 @@ export default function Template({ children }: { children: React.ReactNode }) {
     }
   }, [webApp]);
 
-  if (loading) return <Preloader />;
+  if (loading)
+    return (
+      <MediaPreview>
+        <ReactPlayer
+          url={"/videos/start.mp4"}
+          muted
+          playsinline
+          playing
+          width={"100%"}
+          height={"100%"}
+          onEnded={() => {
+            setLoading(false);
+          }}
+        />
+      </MediaPreview>
+    );
 
   return (
     <>

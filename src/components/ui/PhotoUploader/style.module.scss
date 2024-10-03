@@ -56,6 +56,12 @@
       height: 100%;
     }
 
+    &_icon {
+      width: auto !important;
+      height: auto !important;
+      position: relative !important;
+    }
+
     &_avatar {
       position: absolute;
       left: 0;

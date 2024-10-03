@@ -47,13 +47,12 @@ export const Select = () => {
               {robots.map((robot) => (
                 <SwiperSlide key={robot.name}>
                   <div className={styles.select__robot}>
-                    <video
-                      src="/videos/robot.mp4"
-                      playsInline
-                      muted
-                      loop
-                      autoPlay
-                    />
+                    <video playsInline muted loop autoPlay>
+                      <source
+                        src={`/videos/robot.mp4?cacheBuster=${new Date().getTime()}`}
+                        type="video/mp4"
+                      />
+                    </video>
                   </div>
                 </SwiperSlide>
               ))}

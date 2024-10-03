@@ -144,16 +144,16 @@
     }
 
     &_title {
-      width: calc(100% - 24px);
-      font-size: 16px;
+      width: calc(100% - 14px);
+      font-size: 14px;
       font-weight: 600;
       color: var(--stroke-accent);
       transform: rotate(-90deg);
       transform-origin: left bottom;
       line-height: 1;
       position: absolute;
-      bottom: 0;
-      right: 8px;
+      bottom: -1px;
+      right: 0;
       text-align: center;
       z-index: 3;
 
@@ -214,6 +214,28 @@
           0 100%
         );
         z-index: 1;
+      }
+    }
+
+    &_lock {
+      position: absolute;
+      left: calc(50% + 12px);
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      filter: none !important;
+    }
+
+    &_locked {
+      pointer-events: none;
+
+      &::before,
+      &::after {
+        filter: grayscale(1);
+      }
+
+      & > * {
+        filter: grayscale(1);
       }
     }
   }

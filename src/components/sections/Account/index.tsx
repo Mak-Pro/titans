@@ -1,19 +1,24 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState, useEffect, FormEvent, useContext, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTelegram } from "@/providers/telegram";
-import AppContext from "@/providers/context";
-import { CropperBox, PhotoUploader, Spacer, BoardInfo } from "@/components";
+import {
+  CropperBox,
+  PhotoUploader,
+  Spacer,
+  BoardInfo,
+  Preloader,
+} from "@/components";
 import styles from "./style.module.scss";
 import { numberFormatter, readFile, checkImageFileType } from "@/helpers";
-import { userAxios, infoUser } from "@/api";
+import { infoUser, updateUser } from "@/api";
 import toast from "react-hot-toast";
-import { UserInfoProps } from "@/Types";
+import { UserInfoProps, TitanProps } from "@/Types";
+import clsx from "clsx";
 
 export const Account = () => {
   const uploaderRef = useRef<any>(null);
-  const { setLoading } = useContext(AppContext);
   const router = useRouter();
   const { user } = useTelegram();
   const [modal, setModal] = useState(false);
@@ -24,6 +29,8 @@ export const Account = () => {
   const [userData, setUserData] = useState<UserInfoProps | undefined>(
     undefined
   );
+  const [titans, setTitans] = useState<TitanProps[]>([]);
+  const [updating, setUpdating] = useState(false);
 
   const onFileChange = async (e: any) => {
     const imageTypes = ["jpg", "jpeg", "png", "webp", "ico"];
@@ -51,6 +58,7 @@ export const Account = () => {
 
   const handleCroppedImage = (url: string) => {
     setCroppedImageSrc(url);
+    submitHandler();
   };
 
   const triggerInput = () => {
@@ -61,9 +69,16 @@ export const Account = () => {
 
   useEffect(() => {
     if (user) {
-      infoUser(user.id).then((data) => {
+      infoUser(user.id).then((data: UserInfoProps) => {
+        const allTitans = [{ ...data.currentTitan }, ...data.titans];
+        setTitans(allTitans);
+
         setUserData(data);
-        if (!data.avatarLink.includes("null") && !data.avatarLink !== null) {
+        if (
+          data.avatarLink &&
+          !data.avatarLink.includes("null") &&
+          !data.avatarLink !== null
+        ) {
           setCroppedImageSrc(data.avatarLink);
         } else {
           setCroppedImageSrc("/icons/spinner-color.svg");
@@ -72,49 +87,61 @@ export const Account = () => {
     }
   }, [user]);
 
-  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    const token = sessionStorage.getItem("token");
+  const submitHandler = async (url?: string) => {
+    setUpdating(true);
     const data = {
-      telegramId: String(user?.id),
+      username: userData?.username,
       avatar: "",
     };
 
-    if (imageFile) {
+    if (url) {
+      const base64url = await fetch(url)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          return new Promise((res) => {
+            reader.onloadend = () => {
+              res(reader.result);
+            };
+          });
+        });
+      data.avatar = base64url as string;
+      if (user) {
+        updateUser(user.id, data).then((response) => {
+          setUpdating(false);
+          toast.success("The profile has been updated!", {
+            id: "profile_update_1",
+            position: "top-center",
+          });
+        });
+      }
+    }
+
+    if (imageFile && !url) {
       const reader = new FileReader();
       reader.readAsDataURL(imageFile as Blob);
       reader.onload = function () {
         const base64 = reader.result;
         data.avatar = base64 as string;
-
-        console.log(data.avatar);
-
-        userAxios
-          .post("/users", data)
-          .then((response) => {
-            const { status } = response;
-            if (status === 200) router.replace("/");
-          })
-          .finally(() => setLoading(false));
+        if (user) {
+          updateUser(user.id, data).then((response) => {
+            setUpdating(false);
+            toast.success("The profile has been updated!", {
+              id: "profile_update_2",
+              position: "top-center",
+            });
+          });
+        }
       };
-    } else {
-      userAxios
-        .post("/users", data)
-        .then((response) => {
-          console.log(response);
-
-          const { status } = response;
-          if (status === 200) router.replace("/");
-        })
-        .finally(() => setLoading(false));
     }
   };
 
   return (
     <>
+      {updating && <Preloader className={styles.account_preloader} />}
       <div className={styles.account}>
-        <form onSubmit={submitHandler} autoComplete="off">
+        <form autoComplete="off">
           <input
             type="hidden"
             name="avatar"
@@ -144,45 +171,47 @@ export const Account = () => {
         </BoardInfo>
 
         <Spacer space={24} />
-        <h5 className={styles.account__robots_title}>Select Your Avatar</h5>
-        <div className={styles.account__robots}>
-          <div
-            className={styles.account__robot}
-            onClick={() => setCroppedImageSrc("/images/image-stub.jpg")}
-          >
-            <div className={styles.account__robot_title}>Name</div>
-            <div className={styles.account__robot_avatar}>
-              <Image src="/images/image-stub.jpg" fill alt="robot" />
+        {titans.length > 0 && (
+          <>
+            <h5 className={styles.account__robots_title}>Select Your Avatar</h5>
+            <div className={styles.account__robots}>
+              {titans.map((titan, i) => (
+                <div
+                  key={titan.name}
+                  className={clsx(
+                    styles.account__robot,
+                    !titan.available && styles.account__robot_locked
+                  )}
+                  onClick={() => {
+                    setCroppedImageSrc(`/images/avatar-stub-${i + 1}.jpg`);
+                    submitHandler(`/images/avatar-stub-${i + 1}.jpg`);
+                  }}
+                >
+                  {!titan.available && (
+                    <Image
+                      src="/icons/lock-icon.svg"
+                      width={40}
+                      height={40}
+                      alt="locked"
+                      className={styles.account__robot_lock}
+                    />
+                  )}
+
+                  <div className={styles.account__robot_title}>
+                    {titan.name}
+                  </div>
+                  <div className={styles.account__robot_avatar}>
+                    <Image
+                      src={`/images/avatar-stub-${i + 1}.jpg`}
+                      fill
+                      alt={titan.name}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
-          <div
-            className={styles.account__robot}
-            onClick={() => setCroppedImageSrc("/images/image-stub.jpg")}
-          >
-            <div className={styles.account__robot_title}>Name</div>
-            <div className={styles.account__robot_avatar}>
-              <Image src="/images/image-stub.jpg" fill alt="robot" />
-            </div>
-          </div>
-          <div
-            className={styles.account__robot}
-            onClick={() => setCroppedImageSrc("/images/image-stub.jpg")}
-          >
-            <div className={styles.account__robot_title}>Name</div>
-            <div className={styles.account__robot_avatar}>
-              <Image src="/images/image-stub.jpg" fill alt="robot" />
-            </div>
-          </div>
-          <div
-            className={styles.account__robot}
-            onClick={() => setCroppedImageSrc("/images/image-stub.jpg")}
-          >
-            <div className={styles.account__robot_title}>Name</div>
-            <div className={styles.account__robot_avatar}>
-              <Image src="/images/image-stub.jpg" fill alt="robot" />
-            </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
       <div
         className={`${styles.account__modal} ${

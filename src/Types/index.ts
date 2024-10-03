@@ -47,7 +47,7 @@ export interface BoardProps {
   bonus?: number;
   done?: boolean;
   questId?: number;
-  callBack?: () => void | undefined;
+  callBack?: () => void;
 }
 
 export interface SlotProps {
@@ -204,3 +204,10 @@ export interface QuestsProps {
 }
 
 export type TitanAttributes = "POWER" | "AGILITY" | "STAMINA";
+
+export interface SpecialBonusProps {
+  description: string;
+  done: boolean;
+  questId: number;
+  reward: number;
+}
