@@ -50,7 +50,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
     return (
       <MediaPreview>
         <ReactPlayer
-          url={"/videos/start.mp4"}
+          url={"/videos/start.webm"}
           muted
           playsinline
           playing
