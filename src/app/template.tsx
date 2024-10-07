@@ -46,22 +46,22 @@ export default function Template({ children }: { children: React.ReactNode }) {
     }
   }, [webApp]);
 
-  if (loading)
-    return (
-      <MediaPreview>
-        <ReactPlayer
-          url={"/videos/start.webm"}
-          muted
-          playsinline
-          playing
-          width={"100%"}
-          height={"100%"}
-          onEnded={() => {
-            setLoading(false);
-          }}
-        />
-      </MediaPreview>
-    );
+  // if (loading)
+  //   return (
+  //     <MediaPreview>
+  //       <ReactPlayer
+  //         url={"/videos/start.webm"}
+  //         muted
+  //         playsinline
+  //         playing
+  //         width={"100%"}
+  //         height={"100%"}
+  //         onEnded={() => {
+  //           setLoading(false);
+  //         }}
+  //       />
+  //     </MediaPreview>
+  //   );
 
   return (
     <>
