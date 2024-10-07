@@ -99,10 +99,15 @@ export const CropperBox = ({
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
 
-    const offscreen = new OffscreenCanvas(
-      completedCrop.width * scaleX,
-      completedCrop.height * scaleY
-    );
+    // const offscreen = new OffscreenCanvas(
+    //   completedCrop.width * scaleX,
+    //   completedCrop.height * scaleY
+    // );
+
+    const offscreen = document.createElement("canvas");
+    offscreen.width = completedCrop.width * scaleX;
+    offscreen.height = completedCrop.height * scaleY;
+
     const ctx = offscreen.getContext("2d");
     if (!ctx) {
       throw new Error("No 2d context");
@@ -121,25 +126,53 @@ export const CropperBox = ({
     );
     // You might want { type: "image/jpeg", quality: <0 to 1> } to
     // reduce image size
-    const blob = await offscreen.convertToBlob({
-      type: "image/png",
-    });
+    // const blob = await offscreen.convertToBlob({
+    //   type: "image/png",
+    // });
 
-    if (blobUrlRef.current) {
-      URL.revokeObjectURL(blobUrlRef.current);
-    }
-    blobUrlRef.current = URL.createObjectURL(blob);
-    {
-      applyHandler && applyHandler(URL.createObjectURL(blob));
-    }
-    {
-      cancelHandler && cancelHandler();
-    }
+    // if (blobUrlRef.current) {
+    //   URL.revokeObjectURL(blobUrlRef.current);
+    // }
+    // blobUrlRef.current = URL.createObjectURL(blob);
+    // {
+    //   applyHandler && applyHandler(URL.createObjectURL(blob));
+    // }
+    // {
+    //   cancelHandler && cancelHandler();
+    // }
 
-    if (hiddenAnchorRef.current) {
-      hiddenAnchorRef.current.href = blobUrlRef.current;
-      hiddenAnchorRef.current.click();
-    }
+    // if (hiddenAnchorRef.current) {
+    //   hiddenAnchorRef.current.href = blobUrlRef.current;
+    //   hiddenAnchorRef.current.click();
+    // }
+
+    offscreen.toBlob(
+      async (blob) => {
+        if (!blob) {
+          throw new Error("Canvas is empty");
+        }
+
+        if (blobUrlRef.current) {
+          URL.revokeObjectURL(blobUrlRef.current);
+        }
+
+        blobUrlRef.current = URL.createObjectURL(blob);
+
+        if (applyHandler) {
+          applyHandler(blobUrlRef.current);
+        }
+
+        if (cancelHandler) {
+          cancelHandler();
+        }
+
+        if (hiddenAnchorRef.current) {
+          hiddenAnchorRef.current.href = blobUrlRef.current;
+          hiddenAnchorRef.current.click();
+        }
+      },
+      "image/png" // Тип изображения
+    );
   }
 
   useEffect(() => {
