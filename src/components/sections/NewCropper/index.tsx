@@ -1,16 +1,16 @@
-"use client";
 import React, { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import Dropzone from "react-dropzone";
 import { Area } from "react-easy-crop";
-import getCroppedImg from "./cropImage";
+import getCroppedImg from "./cropImage"; // Вспомогательная функция для получения обрезанного изображения
 
-export const AvatarUploader = () => {
+export const AvatarUploader: React.FC = () => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
+  const [isCropping, setIsCropping] = useState(true); // Управляет отображением обрезки
 
   const onCropComplete = useCallback(
     (_croppedArea: Area, croppedAreaPixels: Area) => {
@@ -25,6 +25,7 @@ export const AvatarUploader = () => {
     reader.readAsDataURL(file);
     reader.onload = () => {
       setImageSrc(reader.result as string);
+      setIsCropping(true); // Сбрасываем состояние для повторной обрезки при загрузке нового изображения
     };
   };
 
@@ -33,6 +34,7 @@ export const AvatarUploader = () => {
       try {
         const croppedImg = await getCroppedImg(imageSrc, croppedAreaPixels);
         setCroppedImage(croppedImg);
+        setIsCropping(false); // Скрываем окно обрезки после обрезки
       } catch (e) {
         console.error(e);
       }
@@ -50,7 +52,7 @@ export const AvatarUploader = () => {
         )}
       </Dropzone>
 
-      {imageSrc && (
+      {imageSrc && isCropping && (
         <div
           className="crop-container"
           style={{ width: "300px", height: "300px" }}
@@ -68,31 +70,20 @@ export const AvatarUploader = () => {
         </div>
       )}
 
-      <button
-        style={{
-          position: "fixed",
-          left: 0,
-          top: 0,
-          color: "#fff",
-          fontSize: "30px",
-        }}
-        onClick={showCroppedImage}
-      >
-        Обрезать
-      </button>
+      {imageSrc && isCropping && (
+        <button onClick={showCroppedImage}>Обрезать</button>
+      )}
 
-      {croppedImage && (
+      {!isCropping && croppedImage && (
         <div>
           <h2>Предпросмотр:</h2>
           <img
             src={croppedImage}
             alt="Cropped Avatar"
-            style={{ width: "100px", height: "100px" }}
+            style={{ width: "100px", height: "100px", borderRadius: "50%" }}
           />
         </div>
       )}
     </div>
   );
 };
-
-export default AvatarUploader;
