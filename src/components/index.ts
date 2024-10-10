@@ -41,3 +41,4 @@ export { WheelOfFortune } from "./sections/WheelOfFortune";
 export { Select } from "./sections/Select";
 export { Play } from "./sections/Play";
 export { Farming } from "./sections/Farming";
+export { AvatarUploader } from "./sections/NewCropper";
