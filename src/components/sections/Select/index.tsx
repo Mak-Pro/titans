@@ -136,22 +136,6 @@ export const Select = () => {
         )}
       >
         <Button
-          variant="filled"
-          size="medium"
-          textColor="var(--button-text-primary)"
-          bgColor="var(--button-bg-primary)"
-          href={robots ? `/${robots[selected].id}` : "/"}
-          radius={0}
-          target="_self"
-          className={clsx(
-            userData?.gamePhase === "FARMING" &&
-              selected !== 0 &&
-              styles.inactive
-          )}
-        >
-          Play
-        </Button>
-        <Button
           variant="outlined"
           size="medium"
           textColor="var(--button-bg-primary)"
