@@ -1,4 +1,6 @@
 "use client";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState, useContext } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -11,20 +13,65 @@ import { infoUser } from "@/api";
 import AppContext from "@/providers/context";
 import { UserInfoProps, TitanProps } from "@/Types";
 
+const robots = [
+  {
+    "name": "Mythor",
+    "side": "PROTECTORS",
+    "powerPrice": 880,
+    "staminaPrice": 1080,
+    "agilityPrice": 1100,
+    "minPower": 20,
+    "maxPower": 70,
+    "minStamina": 20,
+    "maxStamina": 70,
+    "minAgility": 20,
+    "maxAgility": 70,
+    "available": false,
+  },
+  {
+    "name": "Thalix",
+    "side": "PROTECTORS",
+    "powerPrice": 2640,
+    "staminaPrice": 3240,
+    "agilityPrice": 3300,
+    "minPower": 60,
+    "maxPower": 100,
+    "minStamina": 60,
+    "maxStamina": 100,
+    "minAgility": 60,
+    "maxAgility": 100,
+    "available": false,
+  },
+  {
+    "name": "Exxiron",
+    "side": "PROTECTORS",
+    "powerPrice": 1760,
+    "staminaPrice": 2160,
+    "agilityPrice": 2200,
+    "minPower": 40,
+    "maxPower": 85,
+    "minStamina": 40,
+    "maxStamina": 85,
+    "minAgility": 40,
+    "maxAgility": 85,
+    "available": false,
+  },
+];
+
 export const Select = () => {
+  const router = useRouter();
   const { user } = useContext(AppContext);
   const [userData, setUserData] = useState<UserInfoProps | undefined>(
     undefined
   );
-
-  let robots: TitanProps[] | null = null;
-  if (userData) {
-    robots = [{ ...userData?.currentTitan }, ...userData!.titans];
-  }
+  const [selected, setSelected] = useState(0);
+  const [locked, setLocked] = useState(false);
 
   useEffect(() => {
     if (user) {
-      infoUser(user.id).then((data) => setUserData(data));
+      infoUser(user.id).then((data) => {
+        setUserData(data);
+      });
     }
   }, [user]);
 
@@ -43,14 +90,35 @@ export const Select = () => {
               spaceBetween={16}
               navigation={{}}
               loop={true}
+              onSlideChange={(swiper) => {
+                setSelected(swiper.realIndex);
+                setLocked(!robots[swiper.realIndex].available);
+              }}
             >
               {robots.map((robot) => (
                 <SwiperSlide key={robot.name}>
-                  <div className={styles.select__robot}>
+                  <div
+                    className={clsx(
+                      styles.select__robot,
+                      !robot.available && styles.select__robot_locked
+                    )}
+                  >
+                    {true && (
+                      <Image
+                        src="/icons/lock-icon.svg"
+                        width={60}
+                        height={60}
+                        alt="locked"
+                        className={styles.select__robot_lock}
+                      />
+                    )}
+
                     <video playsInline muted loop autoPlay>
                       <source
-                        src={`/videos/robot.mp4?cacheBuster=${new Date().getTime()}`}
-                        type="video/mp4"
+                        src={`/videos/${robot.side.toLocaleLowerCase()}-${
+                          robot.name
+                        }.webm`}
+                        type="video/webm"
                       />
                     </video>
                   </div>
@@ -60,15 +128,26 @@ export const Select = () => {
           )}
         </div>
       </div>
-      <div className={clsx(styles.select__footer, "fixed")}>
+      <div
+        className={clsx(
+          styles.select__footer,
+          "fixed",
+          locked && styles.select__footer_locked
+        )}
+      >
         <Button
           variant="filled"
           size="medium"
           textColor="var(--button-text-primary)"
           bgColor="var(--button-bg-primary)"
-          href="/play"
+          href={robots ? `/${robots[selected].id}` : "/"}
           radius={0}
           target="_self"
+          className={clsx(
+            userData?.gamePhase === "FARMING" &&
+              selected !== 0 &&
+              styles.inactive
+          )}
         >
           Play
         </Button>
@@ -77,9 +156,11 @@ export const Select = () => {
           size="medium"
           textColor="var(--button-bg-primary)"
           bgColor="var(--button-bg-primary)"
-          href="/boost"
+          onClick={() => {
+            sessionStorage.setItem("boost", `${selected}`);
+            router.replace("/boost");
+          }}
           radius={0}
-          target="_self"
         >
           Upgrade
         </Button>

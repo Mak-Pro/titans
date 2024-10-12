@@ -1,4 +1,4 @@
-import { Spacer, Register, AvatarUploader } from "@/components";
+import { Spacer, Register, AvatarUploader, Select } from "@/components";
 export default async function RegisterPage() {
   return (
     <>
@@ -10,7 +10,8 @@ export default async function RegisterPage() {
       <p style={{ textAlign: "center" }}>Enter your nickname and enjoy</p>
       <Spacer space={20} />
       {/* <Register /> */}
-      <AvatarUploader />
+      {/* <AvatarUploader /> */}
+      <Select />
     </>
   );
 }

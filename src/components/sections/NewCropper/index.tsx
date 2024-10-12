@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import Dropzone from "react-dropzone";
@@ -35,6 +36,7 @@ export const AvatarUploader: React.FC = () => {
         const croppedImg = await getCroppedImg(imageSrc, croppedAreaPixels);
         setCroppedImage(croppedImg);
         setIsCropping(false); // Скрываем окно обрезки после обрезки
+        setZoom(1);
       } catch (e) {
         console.error(e);
       }
@@ -66,12 +68,18 @@ export const AvatarUploader: React.FC = () => {
             onCropChange={setCrop}
             onZoomChange={setZoom}
             onCropComplete={onCropComplete}
+            showGrid={false}
           />
         </div>
       )}
 
       {imageSrc && isCropping && (
-        <button onClick={showCroppedImage}>Обрезать</button>
+        <button
+          style={{ position: "fixed", left: 0, top: 0, color: "#fff" }}
+          onClick={showCroppedImage}
+        >
+          Обрезать
+        </button>
       )}
 
       {!isCropping && croppedImage && (
