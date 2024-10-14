@@ -97,16 +97,16 @@ export const Select = () => {
             >
               {robots.map((robot) => (
                 <SwiperSlide key={robot.name}>
+                  {true && (
+                    <Image
+                      src="/icons/lock-icon.png"
+                      width={60}
+                      height={60}
+                      alt="locked"
+                      className={styles.select__robot_lock}
+                    />
+                  )}
                   <div className={clsx(styles.select__robot)}>
-                    {true && (
-                      <Image
-                        src="/icons/lock-icon.png"
-                        width={60}
-                        height={60}
-                        alt="locked"
-                        className={styles.select__robot_lock}
-                      />
-                    )}
                     <video playsInline muted loop autoPlay>
                       <source
                         src={`/videos/${robot.side.toLocaleLowerCase()}-${
