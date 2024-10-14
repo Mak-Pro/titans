@@ -107,14 +107,14 @@ export const Select = () => {
                         className={styles.select__robot_lock}
                       />
                     )}
-                    {/* <video playsInline muted loop autoPlay>
+                    <video playsInline muted loop autoPlay>
                       <source
                         src={`/videos/${robot.side.toLocaleLowerCase()}-${
                           robot.name
                         }.webm`}
                         type="video/webm"
                       />
-                    </video> */}
+                    </video>
                   </div>
                 </SwiperSlide>
               ))}
