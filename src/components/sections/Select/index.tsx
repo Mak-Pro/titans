@@ -107,7 +107,6 @@ export const Select = () => {
                         className={styles.select__robot_lock}
                       />
                     )}
-
                     {/* <video playsInline muted loop autoPlay>
                       <source
                         src={`/videos/${robot.side.toLocaleLowerCase()}-${
