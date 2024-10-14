@@ -97,15 +97,10 @@ export const Select = () => {
             >
               {robots.map((robot) => (
                 <SwiperSlide key={robot.name}>
-                  <div
-                    className={clsx(
-                      styles.select__robot,
-                      !robot.available && styles.select__robot_locked
-                    )}
-                  >
+                  <div className={clsx(styles.select__robot)}>
                     {true && (
                       <Image
-                        src="/icons/lock-icon.svg"
+                        src="/icons/lock-icon.png"
                         width={60}
                         height={60}
                         alt="locked"
@@ -113,14 +108,14 @@ export const Select = () => {
                       />
                     )}
 
-                    <video playsInline muted loop autoPlay>
+                    {/* <video playsInline muted loop autoPlay>
                       <source
                         src={`/videos/${robot.side.toLocaleLowerCase()}-${
                           robot.name
                         }.webm`}
                         type="video/webm"
                       />
-                    </video>
+                    </video> */}
                   </div>
                 </SwiperSlide>
               ))}
